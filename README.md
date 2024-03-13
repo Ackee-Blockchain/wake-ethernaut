@@ -19,7 +19,6 @@ You can get more information about Wake on [getwake.io](https://getwake.io/) web
 To compile this repository do:
 ```bash
 wake compile
-wake up
 ```
 
 To turn on autocompile in current window do:
