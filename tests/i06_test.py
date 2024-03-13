@@ -1,7 +1,7 @@
 from wake.testing import *
 from tests.level_service import LevelService
 from pytypes.contracts.i06_delegation import Delegate, Delegation
-# TODO You can import your our own smart contract(s) here.
+
 
 @default_chain.connect()
 def test_level_06():
@@ -11,7 +11,5 @@ def test_level_06():
     service.check_level_06(contract)
 
 def do_level_06_solution(contract: Delegation):
-    # TODO Claim ownership of the contract.
-    # TODO You can deploy your own smart contract(s) here.
-    # TODO Code here ...
-    pass
+    # Training: delegatecall, fallback(), invoking function by function selector 
+    contract.transact(b"\xdd\x36\x5b\x8b")

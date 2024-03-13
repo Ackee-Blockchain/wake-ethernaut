@@ -11,6 +11,5 @@ def test_level_02():
     service.check_level_02(contract)
 
 def do_level_02_solution(contract: Fallout):
-    # TODO Claim ownership of the contract.
-    # TODO Code here ...
-    pass
+    # Problem: unsecured construction method
+    contract.Fal1out()

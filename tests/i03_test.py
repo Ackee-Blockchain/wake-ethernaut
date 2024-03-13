@@ -1,7 +1,7 @@
 from wake.testing import *
 from tests.level_service import LevelService
 from pytypes.contracts.i03_coinflip import CoinFlip
-# TODO You can import your our own smart contract(s) here.
+from pytypes.contracts.attacker.i03_coinflip_solver import CoinFlipSolver
 
 @default_chain.connect()
 def test_level_03():
@@ -11,7 +11,11 @@ def test_level_03():
     service.check_level_03(contract)
 
 def do_level_03_solution(contract: CoinFlip):
-    # TODO Guess the correct outcome 10 times in a row.
-    # TODO You can deploy your own smart contract(s) here.
-    # TODO Code here ...
-    pass
+    # Problem: any calculations can be done by deployed helper contract, which than calls the original contract
+    solver = CoinFlipSolver.deploy()
+
+    for i in range(11):
+        tx = solver.solveFlip(contract.address)
+        side, result = tx.return_value
+        assert True == result
+        print(f"In block#{tx.block_number} you guessed {side} and you were right!")

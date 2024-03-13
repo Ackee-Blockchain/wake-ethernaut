@@ -11,7 +11,14 @@ def test_level_00():
     service.check_level_00(contract)
 
 def do_level_00_solution(contract: Tutorial):
-    # TODO Run this test to know, what to do next.
+    # Training: simple method calling
     print(contract.info())
-    # TODO Code here ...
-    pass
+    print(contract.info1())
+    print(contract.info2("hello"))
+    print(contract.infoNum())
+    print(contract.info42())
+    print(contract.theMethodName())
+    print(contract.method7123949())
+    print(contract.password())
+
+    contract.authenticate(contract.password())
