@@ -5,12 +5,12 @@ from pytypes.contracts.lv03_coinflip import CoinFlip
 
 @default_chain.connect()
 def test_level_03():
-    service = EthernautDeployer(default_chain)
-    contract = service.deploy_lv03()
-    do_level_03_solution(contract)
-    service.check_lv03(contract)
+    ethernaut = EthernautDeployer(default_chain)
+    contract = ethernaut.deploy_lv03()
+    exploit_level_03(contract)
+    ethernaut.check_lv03(contract)
 
-def do_level_03_solution(contract: CoinFlip):
+def exploit_level_03(contract: CoinFlip):
     # TODO Guess the correct outcome 10 times in a row.
     # TODO You can deploy your own smart contract(s) here.
     # TODO Code here ...

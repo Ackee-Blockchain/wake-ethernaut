@@ -5,12 +5,12 @@ from pytypes.contracts.lv04_telephone import Telephone
 
 @default_chain.connect()
 def test_level_04():
-    service = EthernautDeployer(default_chain)
-    contract = service.deploy_lv04()
-    do_level_04_solution(contract)
-    service.check_lv04(contract)
+    ethernaut = EthernautDeployer(default_chain)
+    contract = ethernaut.deploy_lv04()
+    exploit_level_04(contract)
+    ethernaut.check_lv04(contract)
     
-def do_level_04_solution(contract: Telephone):
+def exploit_level_04(contract: Telephone):
     # TODO Claim ownership of the contract.
     # TODO You can deploy your own smart contract(s) here.
     # TODO Code here ...
