@@ -1,17 +1,17 @@
 from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
-from pytypes.contracts.lv00_hello import Tutorial
+from pytypes.contracts.lv09_king import King
 # TODO You can import your our own smart contract(s) here.
 
 @default_chain.connect()
-def test_lv00():
+def test_lv09():
     ethernaut = EthernautDeployer(default_chain)
-    contract = ethernaut.deploy_lv00()
-    exploit_lv00(contract)
-    ethernaut.check_lv00(contract)
+    contract = ethernaut.deploy_lv09()
+    exploit_lv09(contract)
+    ethernaut.check_lv09(contract)
 
-def exploit_lv00(contract: Tutorial):
-    # TODO ?
+def exploit_lv09(contract: King):
+    # TODO Became the new king and break the game - no one can claim the kingship from you.
     # TODO You can import your our own smart contract(s) here.
     # TODO Code here ...
     pass

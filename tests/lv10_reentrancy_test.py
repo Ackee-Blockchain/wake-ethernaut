@@ -1,17 +1,17 @@
 from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
-from pytypes.contracts.lv00_hello import Tutorial
+from pytypes.contracts.lv10_reentrancy import Reentrance
 # TODO You can import your our own smart contract(s) here.
 
 @default_chain.connect()
-def test_lv00():
+def test_lv10():
     ethernaut = EthernautDeployer(default_chain)
-    contract = ethernaut.deploy_lv00()
-    exploit_lv00(contract)
-    ethernaut.check_lv00(contract)
+    contract = ethernaut.deploy_lv10()
+    exploit_lv10(contract)
+    ethernaut.check_lv10(contract)
 
-def exploit_lv00(contract: Tutorial):
-    # TODO ?
+def exploit_lv10(contract: Reentrance):
+    # TODO Steal all the funds from the contract.
     # TODO You can import your our own smart contract(s) here.
     # TODO Code here ...
     pass

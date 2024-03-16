@@ -4,13 +4,13 @@ from pytypes.contracts.lv08_vault import Vault
 
 
 @default_chain.connect()
-def test_level_08():
+def test_lv08():
     ethernaut = EthernautDeployer(default_chain)
     contract = ethernaut.deploy_lv08()
-    exploit_level_08(contract, default_chain)
+    exploit_lv08(contract, default_chain)
     ethernaut.check_lv08(contract)
 
-def exploit_level_08(contract: Vault, blockchain: Chain):
+def exploit_lv08(contract: Vault, blockchain: Chain):
     # Problem: Blockchain is public, no data can be hidden
     # Training: Representation of blockchain inside the testing framework - in reality you use blockchain explorer
 

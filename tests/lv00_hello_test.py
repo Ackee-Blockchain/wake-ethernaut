@@ -4,13 +4,13 @@ from pytypes.contracts.lv00_hello import Tutorial
 
 
 @default_chain.connect()
-def test_level_00():
+def test_lv00():
     ethernaut = EthernautDeployer(default_chain)
     contract = ethernaut.deploy_lv00()
-    exploit_level_00(contract)
+    exploit_lv00(contract)
     ethernaut.check_lv00(contract)
 
-def exploit_level_00(contract: Tutorial):
+def exploit_lv00(contract: Tutorial):
     # Training: simple method calling
     print(contract.info())
     print(contract.info1())
