@@ -4,13 +4,13 @@ from pytypes.contracts.lv05_token import Token
 # TODO You can import your our own smart contract(s) here.
 
 @default_chain.connect()
-def test_level_05():
+def test_lv05():
     ethernaut = EthernautDeployer(default_chain)
     contract = ethernaut.deploy_lv05()
-    exploit_level_05(contract, ethernaut.other_account)
+    exploit_lv05(contract, ethernaut.other_account)
     ethernaut.check_lv05(contract)
 
-def exploit_level_05(contract: Token, other_account: Account):
+def exploit_lv05(contract: Token, other_account: Account):
     # TODO Get your hands on any additional tokens, preferably a very large amount of tokens.
     # TODO You can deploy your own smart contract(s) here.
     # TODO Code here ...

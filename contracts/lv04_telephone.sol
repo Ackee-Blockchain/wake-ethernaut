@@ -10,7 +10,7 @@ contract Telephone {
   }
 
   function changeOwner(address _owner) public {
-    if (tx.origin != msg.sender) { // wake-disable-line
+    if (tx.origin != msg.sender) {
       owner = _owner; 
     }
   }

@@ -4,13 +4,13 @@ from pytypes.contracts.lv02_fallout import Fallout
 
 
 @default_chain.connect()
-def test_level_02():
+def test_lv02():
     ethernaut = EthernautDeployer(default_chain)
     contract = ethernaut.deploy_lv02()
-    exploit_level_02(contract)
+    exploit_lv02(contract)
     ethernaut.check_lv02(contract)
 
-def exploit_level_02(contract: Fallout):
+def exploit_lv02(contract: Fallout):
     # TODO Claim ownership of the contract.
     # TODO Code here ...
     pass
