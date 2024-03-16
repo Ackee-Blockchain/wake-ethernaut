@@ -11,5 +11,5 @@ def test_lv05():
     ethernaut.check_lv05(contract)
 
 def exploit_lv05(contract: Token, other_account: Account):
-    # Problem: overflow of unsigned int
+    # Attack vector: overflow of unsigned int
     contract.transfer(other_account, 21)

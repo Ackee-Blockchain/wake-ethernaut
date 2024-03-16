@@ -11,7 +11,7 @@ def test_lv04():
     ethernaut.check_lv04(contract)
     
 def exploit_lv04(contract: Telephone):
-    # Problem: tx.origin is not changed in redirect => can be used for phissing attack
+    # Attack vector: tx.origin is not changed in redirect => can be used for phissing attack
     # Training: difference between tx.origin and tx.sender
     #   In a simple call chain A->B->C->D
     #        inside D msg.sender will be C, and tx.origin will be A

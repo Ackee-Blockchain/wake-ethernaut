@@ -27,6 +27,7 @@ class EthernautDeployer:
         self.other_account = self.chain.accounts[2]
         self.chain.set_default_accounts(self.attacker)
         self.attacker.balance = 10 * 10**18             # set attacker's balance to 10 Eth
+        print()
 
     def deploy_lv00(self):
         return Tutorial.deploy("ethernaut0", from_=self.owner)
@@ -122,12 +123,19 @@ class EthernautDeployer:
         print("Your lockpicking skills are almost as good as LockPickingLawyer's.")
         print("Level 08 passed")
 
-    def check_lv09(self, contract: King):
-        self.check_attacker_is(contract._king(), "king")
-        with must_revert:
-            contract.transact(value=10_000 * 10**18, from_=self.owner)
-        print("Level 09 passed")
+    def check_lv09(self, contract: King, newOvner: Address):
+        assert contract._king() == newOvner, "You must take the kingship."
+        print("You are the king now.")
+        assert contract.balance <= 10 * 10**18, "You can't use more than 10 Ether"
+        try:
+            with must_revert():
+                contract.transact(value=10_000 * 10**18, from_=self.owner)
+            print("Did you really declined 10 000 Ether for the throne?!")
+            print("Level 09 passed")
+        except:
+            raise AssertionError("The kingship was taken from you - you did not break the game.")
 
     def check_lv10(self, contract: Reentrance):
         assert contract.balance == 0, "You must withdraw all funds."
-        print("Level 09 passed")
+        print("You have taken what wasn't meant for you! Well done!")
+        print("Level 10 passed")

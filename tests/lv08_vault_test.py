@@ -11,7 +11,7 @@ def test_lv08():
     ethernaut.check_lv08(contract)
 
 def exploit_lv08(contract: Vault, blockchain: Chain):
-    # Problem: Blockchain is public, no data can be hidden
+    # Attack vector: Blockchain is public, no data can be hidden
     # Training: Representation of blockchain inside the testing framework - in reality you use blockchain explorer
 
     # find the first block with non-zero transactions count

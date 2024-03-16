@@ -11,7 +11,7 @@ def test_lv03():
     ethernaut.check_lv03(contract)
 
 def exploit_lv03(contract: CoinFlip):
-    # Problem: any calculations can be done by deployed helper contract, which than calls the original contract
+    # Attack vector: any calculations can be done by deployed helper contract, which than calls the original contract
     solver = CoinFlipSolver.deploy()
 
     for i in range(11):
