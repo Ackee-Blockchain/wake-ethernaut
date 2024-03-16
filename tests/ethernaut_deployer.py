@@ -53,7 +53,8 @@ class EthernautDeployer:
         return Force.deploy(from_=self.owner)
     
     def deploy_lv08(self):
-        return Vault.deploy(bytes32(bytes("Password123456", "UTF-8")), from_=self.owner) # do not just copy it from here!!
+        vault_key = ''.join(random.choice(string.ascii_letters + string.digits) for i in range(random.randint(7,13)))
+        return Vault.deploy(bytes32(bytes(vault_key, "ascii")), from_=self.owner)
     
     def deploy_lv09(self):
         return 
@@ -107,7 +108,7 @@ class EthernautDeployer:
 
     def check_lv08(self, contract: Vault):
         assert contract.locked() == False, "You must unlock the vault."
-        print("I hope you just did not copy pasted it from the 'level_service.py' file.")
+        print("Your lockpicking skills are almost as good as LockPickingLawyer's.")
         print("Level 08 passed")
 
     def check_lv09(self, contract):
