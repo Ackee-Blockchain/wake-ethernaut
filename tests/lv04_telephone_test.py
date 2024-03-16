@@ -1,14 +1,14 @@
 from wake.testing import *
-from tests.level_service import LevelService
-from pytypes.contracts.i04_telephone import Telephone
-from pytypes.contracts.attacker.i04_tunnel import Tunnel
+from tests.ethernaut_deployer import EthernautDeployer
+from pytypes.contracts.lv04_telephone import Telephone
+from pytypes.contracts.attacker.lv04_tunnel import Tunnel
 
 @default_chain.connect()
 def test_level_04():
-    service = LevelService(default_chain)
-    contract = service.deploy_level_04()
+    service = EthernautDeployer(default_chain)
+    contract = service.deploy_lv04()
     do_level_04_solution(contract)
-    service.check_level_04(contract)
+    service.check_lv04(contract)
     
 def do_level_04_solution(contract: Telephone):
     # Problem: tx.origin is not changed in redirect => can be used for phissing attack
