@@ -5,12 +5,12 @@ from pytypes.contracts.attacker.lv03_coinflip_solver import CoinFlipSolver
 
 @default_chain.connect()
 def test_level_03():
-    service = EthernautDeployer(default_chain)
-    contract = service.deploy_lv03()
-    do_level_03_solution(contract)
-    service.check_lv03(contract)
+    ethernaut = EthernautDeployer(default_chain)
+    contract = ethernaut.deploy_lv03()
+    exploit_level_03(contract)
+    ethernaut.check_lv03(contract)
 
-def do_level_03_solution(contract: CoinFlip):
+def exploit_level_03(contract: CoinFlip):
     # Problem: any calculations can be done by deployed helper contract, which than calls the original contract
     solver = CoinFlipSolver.deploy()
 

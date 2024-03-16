@@ -5,11 +5,11 @@ from pytypes.contracts.lv02_fallout import Fallout
 
 @default_chain.connect()
 def test_level_02():
-    service = EthernautDeployer(default_chain)
-    contract = service.deploy_lv02()
-    do_level_02_solution(contract)
-    service.check_lv02(contract)
+    ethernaut = EthernautDeployer(default_chain)
+    contract = ethernaut.deploy_lv02()
+    exploit_level_02(contract)
+    ethernaut.check_lv02(contract)
 
-def do_level_02_solution(contract: Fallout):
+def exploit_level_02(contract: Fallout):
     # Problem: unsecured construction method
     contract.Fal1out()
