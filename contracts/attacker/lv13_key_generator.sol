@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.6.0;
+pragma solidity ^0.8.0;
 
 interface HasEnter {
   function enter(bytes8 _gateKey) external returns (bool);
@@ -11,7 +11,7 @@ contract GatekeeperOneHelper {
 
     // uint32(key) must be equal to uint16(address)
     // uint64(key) must be not equal to uint32(key)
-    uint64 key_uint = uint64(-1) - uint32(-1) + uint16(uint160(tx.origin));
+    uint64 key_uint = type(uint64).max - type(uint32).max + uint16(uint160(tx.origin));
     result = abi.encodePacked(key_uint);
   }
 
