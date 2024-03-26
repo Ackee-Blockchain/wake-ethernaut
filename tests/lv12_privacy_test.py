@@ -11,10 +11,6 @@ def test_lv12():
     ethernaut.check_lv12(contract)
 
 def exploit_lv12(contract: Privacy):
-    # TODO Unlock the contract.
-    # TODO You can import your our own smart contract(s) here.
-    # TODO Code here ...
-    pass
     # Attack vector: Blockchain is public, no data can be hidden
     # Training: Learn how storage layout works and how you can explore it using the testing framework
     # wake print storage-layout contracts/lv12_privacy.sol

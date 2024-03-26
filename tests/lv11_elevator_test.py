@@ -11,10 +11,6 @@ def test_lv11():
     ethernaut.check_lv11(contract)
 
 def exploit_lv11(contract: Elevator):
-    # TODO Reach the top with this Elevator.
-    # TODO You can import your our own smart contract(s) here.
-    # TODO Code here ...
-    pass
     # Attack vector: function isLastFloor is called twice instead of saving its value
     building = BuildingImpl.deploy()
     building.goToWith(13, contract.address)
