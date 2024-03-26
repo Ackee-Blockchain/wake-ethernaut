@@ -13,6 +13,10 @@ from pytypes.contracts.lv07_force import Force
 from pytypes.contracts.lv08_vault import Vault
 from pytypes.contracts.lv09_king import King
 from pytypes.contracts.lv10_reentrancy import Reentrance
+from pytypes.contracts.lv11_elevator import Elevator
+from pytypes.contracts.lv12_privacy import Privacy
+from pytypes.contracts.lv13_gatekeeper_one import GatekeeperOne
+from pytypes.contracts.lv14_gatekeeper_two import GatekeeperTwo
 
 class EthernautDeployer:
     chain: Chain
@@ -27,6 +31,7 @@ class EthernautDeployer:
         self.other_account = self.chain.accounts[2]
         self.chain.set_default_accounts(self.attacker)
         self.attacker.balance = 10 * 10**18             # set attacker's balance to 10 Eth
+        print()
 
     def deploy_lv00(self):
         return Tutorial.deploy("ethernaut0", from_=self.owner)
@@ -56,7 +61,7 @@ class EthernautDeployer:
         return Force.deploy(from_=self.owner)
     
     def deploy_lv08(self):
-        vault_key = ''.join(random.choice(string.ascii_letters + string.digits) for i in range(random.randint(7,13)))
+        vault_key = ''.join(random.choice(string.ascii_letters + string.digits) for i in range(32))
         return Vault.deploy(bytes32(bytes(vault_key, "ascii")), from_=self.owner)
     
     def deploy_lv09(self):
@@ -69,6 +74,22 @@ class EthernautDeployer:
         contract.donate(self.owner, from_=self.owner, value=3 * 10**18)
         contract.withdraw(2 * 10**18, from_=self.owner)
         return contract
+    
+    def deploy_lv11(self):
+        return Elevator.deploy(from_=self.owner)
+    
+    def deploy_lv12(self):
+        some_data = List3([random.randbytes(32), random.randbytes(32), random.randbytes(32)])
+        return Privacy.deploy(some_data, from_=self.owner)
+    
+    def deploy_lv13(self):
+        return GatekeeperOne.deploy(from_= self.owner)
+    
+    def deploy_lv14(self):
+        return GatekeeperTwo.deploy(from_= self.owner)
+    
+    def deploy_lv15(self):
+        return
     
     def check_attacker_is(self, contract_owner: Account, msg = "owner"):
         assert contract_owner == self.attacker.address, f"You must take the {msg}ship."
@@ -122,12 +143,42 @@ class EthernautDeployer:
         print("Your lockpicking skills are almost as good as LockPickingLawyer's.")
         print("Level 08 passed")
 
-    def check_lv09(self, contract: King):
-        self.check_attacker_is(contract._king(), "king")
-        with must_revert:
-            contract.transact(value=10_000 * 10**18, from_=self.owner)
-        print("Level 09 passed")
+    def check_lv09(self, contract: King, newOvner: Address):
+        assert contract._king() == newOvner, "You must take the kingship."
+        print("You are the king now.")
+        assert contract.balance <= 10 * 10**18, "You can't use more than 10 Ether"
+        try:
+            with must_revert():
+                contract.transact(value=10_000 * 10**18, from_=self.owner)
+            print("Did you really declined 10 000 Ether for the throne?!")
+            print("Level 09 passed")
+        except:
+            raise AssertionError("The kingship was taken from you - you did not break the game.")
 
     def check_lv10(self, contract: Reentrance):
         assert contract.balance == 0, "You must withdraw all funds."
-        print("Level 09 passed")
+        print("You have taken what wasn't meant for you! Well done!")
+        print("Level 10 passed")
+
+    def check_lv11(self, contract: Elevator):
+        assert contract.top(), "You must reach the top with this elevator."
+        print("That's some suspicious implementation of a building ...")
+        print("Level 11 passed")
+
+    def check_lv12(self, contract: Privacy):
+        assert contract.locked() == False, "You must unlock this contract."
+        print("Well done! You proved, no data can be hidden on blockchain.")
+        print("Level 12 passed")
+        
+    def check_lv13(self, contract: GatekeeperOne):
+        assert contract.entrant() == self.attacker.address, "You must pass the gatekeeper."
+        print("Well done! Your hacker skills are on the rise!")
+        print("Level 13 passed")
+        
+    def check_lv14(self, contract: GatekeeperTwo):
+        assert contract.entrant() == self.attacker.address, "You must pass the gatekeeper."
+        print("You are becoming good at bribing these gatekeepers.")
+        print("Level 14 passed")
+        
+    def check_lv15(self, contract):
+        return 
