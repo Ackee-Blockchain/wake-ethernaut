@@ -16,6 +16,7 @@ from pytypes.contracts.lv10_reentrancy import Reentrance
 from pytypes.contracts.lv11_elevator import Elevator
 from pytypes.contracts.lv12_privacy import Privacy
 from pytypes.contracts.lv13_gatekeeper_one import GatekeeperOne
+from pytypes.contracts.lv14_gatekeeper_two import GatekeeperTwo
 
 class EthernautDeployer:
     chain: Chain
@@ -85,7 +86,10 @@ class EthernautDeployer:
         return GatekeeperOne.deploy(from_= self.owner)
     
     def deploy_lv14(self):
-        return 
+        return GatekeeperTwo.deploy(from_= self.owner)
+    
+    def deploy_lv15(self):
+        return
     
     def check_attacker_is(self, contract_owner: Account, msg = "owner"):
         assert contract_owner == self.attacker.address, f"You must take the {msg}ship."
@@ -171,5 +175,10 @@ class EthernautDeployer:
         print("Well done! Your hacker skills are on the rise!")
         print("Level 13 passed")
         
-    def check_lv14(self, contract):
+    def check_lv14(self, contract: GatekeeperTwo):
+        assert contract.entrant() == self.attacker.address, "You must pass the gatekeeper."
+        print("You are becoming good at bribing these gatekeepers.")
+        print("Level 14 passed")
+        
+    def check_lv15(self, contract):
         return 
