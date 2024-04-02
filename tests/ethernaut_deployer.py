@@ -17,6 +17,7 @@ from pytypes.contracts.lv11_elevator import Elevator
 from pytypes.contracts.lv12_privacy import Privacy
 from pytypes.contracts.lv13_gatekeeper_one import GatekeeperOne
 from pytypes.contracts.lv14_gatekeeper_two import GatekeeperTwo
+from pytypes.contracts.lv15_naught_coin import NaughtCoin
 
 class EthernautDeployer:
     chain: Chain
@@ -89,7 +90,7 @@ class EthernautDeployer:
         return GatekeeperTwo.deploy(from_= self.owner)
     
     def deploy_lv15(self):
-        return
+        return NaughtCoin.deploy(_player= self.attacker, from_=self.owner) 
     
     def check_attacker_is(self, contract_owner: Account, msg = "owner"):
         assert contract_owner == self.attacker.address, f"You must take the {msg}ship."
@@ -180,5 +181,7 @@ class EthernautDeployer:
         print("You are becoming good at bribing these gatekeepers.")
         print("Level 14 passed")
         
-    def check_lv15(self, contract):
-        return 
+    def check_lv15(self, contract: NaughtCoin):
+        assert contract.balanceOf(self.attacker.address) == 0, "You must withdraw all your assets."
+        print("Nice! You figure out some features of ERC20")
+        print("Level 15 passed")
