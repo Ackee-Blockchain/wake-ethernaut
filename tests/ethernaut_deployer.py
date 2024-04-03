@@ -18,6 +18,8 @@ from pytypes.contracts.lv12_privacy import Privacy
 from pytypes.contracts.lv13_gatekeeper_one import GatekeeperOne
 from pytypes.contracts.lv14_gatekeeper_two import GatekeeperTwo
 from pytypes.contracts.lv15_naught_coin import NaughtCoin
+from pytypes.contracts.lv16_preservation import Preservation, LibraryContract
+
 
 
 class EthernautDeployer:
@@ -92,6 +94,11 @@ class EthernautDeployer:
     
     def deploy_lv15(self):
         return NaughtCoin.deploy(_player= self.attacker, from_=self.owner) 
+    
+    def deploy_lv16(self):
+        library1address = LibraryContract.deploy(from_=self.owner)
+        library2address = LibraryContract.deploy(from_=self.owner)
+        return Preservation.deploy(_timeZone1LibraryAddress=library1address, _timeZone2LibraryAddress=library2address, from_=self.owner) 
     
     def check_attacker_is(self, contract_owner: Account, msg = "owner"):
         assert contract_owner == self.attacker.address, f"You must take the {msg}ship."
@@ -187,3 +194,7 @@ class EthernautDeployer:
         print("Nice! You figured out some features of ERC20")
         print("Level 15 passed")
 
+    def check_lv16(self, contract: Preservation):
+        assert contract.owner() == self.attacker.address, "You must take ownership."
+        print("Gotcha! You are becoming really good in understanding delegate calls.")
+        print("Level 16 passed")
