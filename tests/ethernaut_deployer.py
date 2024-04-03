@@ -20,7 +20,6 @@ from pytypes.contracts.lv14_gatekeeper_two import GatekeeperTwo
 from pytypes.contracts.lv15_naught_coin import NaughtCoin
 from pytypes.contracts.lv16_preservation import Preservation, LibraryContract
 from pytypes.contracts.lv17_recovery import Recovery
-from pytypes.contracts.helper.lv17_helper_recovery import HelperRecovery
 
 
 
@@ -207,8 +206,8 @@ class EthernautDeployer:
         print("Gotcha! You are becoming really good in understanding delegate calls.")
         print("Level 16 passed")
 
-    def check_lv17(self, contract: Recovery, checkContract: HelperRecovery, lostAddress: Address):
-        assert checkContract.generateAddress(contract.address) == lostAddress, "You must find the lost address"
+    def check_lv17(self, contract: Recovery, lostAddress: Address):
+        assert get_create_address(contract.address, contract.nonce-1) == lostAddress, "You must find the lost address"
         print("Well done! You are a big fan of Yellow paper!")
         print("Level 17 passed") 
 
