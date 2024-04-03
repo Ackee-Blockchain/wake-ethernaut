@@ -19,6 +19,9 @@ from pytypes.contracts.lv13_gatekeeper_one import GatekeeperOne
 from pytypes.contracts.lv14_gatekeeper_two import GatekeeperTwo
 from pytypes.contracts.lv15_naught_coin import NaughtCoin
 from pytypes.contracts.lv16_preservation import Preservation, LibraryContract
+from pytypes.contracts.lv17_recovery import Recovery
+from pytypes.contracts.helper.lv17_helper_recovery import HelperRecovery
+
 
 
 
@@ -100,6 +103,11 @@ class EthernautDeployer:
         library2address = LibraryContract.deploy(from_=self.owner)
         return Preservation.deploy(_timeZone1LibraryAddress=library1address, _timeZone2LibraryAddress=library2address, from_=self.owner) 
     
+    def deploy_lv17(self):
+        RecoveryContract = Recovery.deploy(from_=self.owner)
+        RecoveryContract.generateToken(_name = "UKN", _initialSupply = 1000, from_=self.owner)
+        return  RecoveryContract
+
     def check_attacker_is(self, contract_owner: Account, msg = "owner"):
         assert contract_owner == self.attacker.address, f"You must take the {msg}ship."
         print(f"You are the {msg} now.")
@@ -198,3 +206,9 @@ class EthernautDeployer:
         assert contract.owner() == self.attacker.address, "You must take ownership."
         print("Gotcha! You are becoming really good in understanding delegate calls.")
         print("Level 16 passed")
+
+    def check_lv17(self, contract: Recovery, checkContract: HelperRecovery, lostAddress: Address):
+        assert checkContract.generateAddress(contract.address) == lostAddress, "You must find the lost address"
+        print("Well done! You are a big fan of Yellow paper!")
+        print("Level 17 passed") 
+
