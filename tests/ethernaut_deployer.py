@@ -20,7 +20,9 @@ from pytypes.contracts.lv14_gatekeeper_two import GatekeeperTwo
 from pytypes.contracts.lv15_naught_coin import NaughtCoin
 from pytypes.contracts.lv16_preservation import Preservation, LibraryContract
 from pytypes.contracts.lv17_recovery import Recovery
-
+from pytypes.contracts.lv18_magic_num import MagicNum
+from pytypes.contracts.attacker.lv18_magic_num import AttackMagicNum
+from pytypes.contracts.helper.lv18_helper_magic_num import HelperMagicNum
 
 
 
@@ -106,6 +108,9 @@ class EthernautDeployer:
         RecoveryContract = Recovery.deploy(from_=self.owner)
         RecoveryContract.generateToken(_name = "UKN", _initialSupply = 1000, from_=self.owner)
         return  RecoveryContract
+    
+    def deploy_lv18(self):
+        return MagicNum.deploy(from_=self.owner) 
 
     def check_attacker_is(self, contract_owner: Account, msg = "owner"):
         assert contract_owner == self.attacker.address, f"You must take the {msg}ship."
@@ -210,4 +215,22 @@ class EthernautDeployer:
         assert get_create_address(contract.address, contract.nonce-1) == lostAddress, "You must find the lost address"
         print("Well done! You are a big fan of Yellow paper!")
         print("Level 17 passed") 
+
+    def check_lv18(self, contract: MagicNum):
+        
+        encodedCall = Abi.encode_with_signature("whatIsTheMeaningOfLife()", [], [])
+        resultEncodedCall = Account(contract.solver(), chain=default_chain).call(data=encodedCall)
+        (decodedData,) = Abi.decode(data=resultEncodedCall,types=['uint256'])
+
+        helper = HelperMagicNum.deploy()
+        sizeCheck = helper.checkSize(contract.solver())
+
+        print(sizeCheck)        
+        print("resultEncodedCall: ", decodedData)
+
+        assert sizeCheck == True, "Your contract must consist of maximum 10 opcodes"
+        assert decodedData == 42, "Contract must receive '42' as the answer."
+        print("Nice! You have talent to assembly!")
+        print("Level 18 passed")
+        
 
