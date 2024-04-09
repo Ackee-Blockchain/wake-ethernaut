@@ -5,7 +5,7 @@ from pytypes.contracts.attacker.lv16_preservation import AttackPreservation
 
 
 @default_chain.connect()
-def test_lv15():
+def test_lv16():
     ethernaut = EthernautDeployer(default_chain)
     contract = ethernaut.deploy_lv16()
     exploit_lv16(contract, ethernaut.attacker)

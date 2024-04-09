@@ -4,7 +4,7 @@ from pytypes.contracts.lv18_magic_num import MagicNum
 from pytypes.contracts.attacker.lv18_magic_num import AttackMagicNum, AttackMagicNumDeployer
 
 @default_chain.connect()
-def test_lv00():
+def test_lv18():
     ethernaut = EthernautDeployer(default_chain)
     contract = ethernaut.deploy_lv18()
     exploit_lv18(contract)
