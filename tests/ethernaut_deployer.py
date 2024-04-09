@@ -93,7 +93,7 @@ class EthernautDeployer:
         return
     
     def deploy_lv29(self):
-        return 
+        return Switch.deploy(from_=self.owner) 
     
     def check_attacker_is(self, contract_owner: Account, msg = "owner"):
         assert contract_owner == self.attacker.address, f"You must take the {msg}ship."
