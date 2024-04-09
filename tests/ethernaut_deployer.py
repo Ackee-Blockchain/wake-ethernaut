@@ -27,6 +27,7 @@ from pytypes.contracts.lv20_denial import Denial
 from pytypes.contracts.lv21_shop import Shop
 from pytypes.contracts.lv22_dex import Dex, SwappableToken
 from pytypes.contracts.lv23_dex_two import DexTwo, SwappableTokenTwo
+from pytypes.contracts.lv26_double_entry_point import Forta, CryptoVault, LegacyToken, DoubleEntryPoint, DelegateERC20
 from pytypes.contracts.lv28_gatekeeper_three import GatekeeperThree
 from pytypes.contracts.lv29_switch import Switch
 from pytypes.contracts.helper.Deployer import Deployer
@@ -160,12 +161,22 @@ class EthernautDeployer:
     def deploy_lv24(self):
         return
     
+    def deploy_lv26(self):
+        old_legacy_token = LegacyToken.deploy(from_=self.owner)
+        forta = Forta.deploy(from_=self.owner)
+        crypto_vault = CryptoVault.deploy(self.owner.address, from_=self.owner)
+        new_token = DoubleEntryPoint.deploy(old_legacy_token.address, crypto_vault.address, forta.address, self.attacker.address, from_=self.owner)
+        crypto_vault.setUnderlying(new_token.address, from_=self.owner)
+        old_legacy_token.delegateToNewContract(DelegateERC20(new_token), from_=self.owner)
+        old_legacy_token.mint(crypto_vault.address, 100*10**18, from_=self.owner)
+        return new_token
+    
     def deploy_lv28(self):
         return GatekeeperThree.deploy(from_=self.owner)
     
     def deploy_lv29(self):
         return Switch.deploy(from_=self.owner) 
-
+    
     def check_attacker_is(self, contract_owner: Account, msg = "owner"):
         assert contract_owner == self.attacker.address, f"You must take the {msg}ship."
         print(f"You are the {msg} now.")
@@ -316,6 +327,23 @@ class EthernautDeployer:
     def check_lv24(self, contract):
         pass
 
+    def check_lv26(self, contract):
+        instance: DoubleEntryPoint = DoubleEntryPoint(contract)
+        forta: Forta = instance.forta()
+        usersDetectionBot: Address = forta.usersDetectionBots(self.attacker).address
+        assert usersDetectionBot != 0, "DetectionBot did not set"
+        vault: Address = instance.cryptoVault()
+        cryptoVault: CryptoVault = CryptoVault(vault)
+        result = 0
+        try:
+            cryptoVault.sweepToken(instance.delegatedFrom())
+            result = 1
+        except Exception:
+            result = 0
+        assert result == 0, "Should sweepToken fail."
+        assert instance.balanceOf(instance.cryptoVault()) > 0, "balance of DoubleEntryPointToken should not zero."
+        print("Level 26 passed.")
+
     def check_lv28(self, contract: GatekeeperThree):
         assert contract.entrant() == self.attacker.address, "You must pass the gatekeeper."
         print("Your are becomming a gatekeeper yourself ...")
@@ -325,3 +353,7 @@ class EthernautDeployer:
         assert contract.switchOn() == True, "You must turn the switch on."
         print("You have turned the switch on.")
         print("Level 29 passed")
+    def check_lv15(self, contract):
+        return
+
+  
