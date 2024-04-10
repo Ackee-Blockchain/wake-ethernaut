@@ -17,6 +17,7 @@ from pytypes.contracts.lv11_elevator import Elevator
 from pytypes.contracts.lv12_privacy import Privacy
 from pytypes.contracts.lv13_gatekeeper_one import GatekeeperOne
 from pytypes.contracts.lv14_gatekeeper_two import GatekeeperTwo
+from pytypes.contracts.lv28_gatekeeper_three import GatekeeperThree, SimpleTrick
 from pytypes.contracts.lv29_switch import Switch
 
 class EthernautDeployer:
@@ -91,6 +92,9 @@ class EthernautDeployer:
     
     def deploy_lv15(self):
         return
+    
+    def deploy_lv28(self):
+        return GatekeeperThree.deploy(from_=self.owner)
     
     def deploy_lv29(self):
         return Switch.deploy(from_=self.owner) 
@@ -186,6 +190,11 @@ class EthernautDeployer:
         
     def check_lv15(self, contract):
         return 
+    
+    def check_lv28(self, contract: GatekeeperThree):
+        assert contract.entrant() == self.attacker.address, "You must pass the gatekeeper."
+        print("Your are becomming a gatekeeper yourself ...")
+        print("Level 28 passed")
     
     def check_lv29(self, contract: Switch):
         assert contract.switchOn() == True, "You must turn the switch on."
