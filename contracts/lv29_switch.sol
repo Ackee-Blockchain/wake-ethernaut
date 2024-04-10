@@ -17,9 +17,6 @@ contract Switch {
         bytes32[1] memory selector;
         // check that the calldata at position 68 (location of _data)
         assembly {
-            // copies to selector input from
-            // offset 68 in calldata
-            // 4 bytes long
             calldatacopy(selector, 68, 4) // grab function selector from calldata
         }
         // check that the first 4 bytes of the calldata is the offSelector
