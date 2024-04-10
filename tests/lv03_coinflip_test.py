@@ -18,4 +18,3 @@ def exploit_lv03(contract: CoinFlip):
         tx = solver.solveFlip(contract.address)
         side, result = tx.return_value
         assert True == result
-        print(f"In block#{tx.block_number} you guessed {side} and you were right!")

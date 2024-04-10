@@ -232,16 +232,13 @@ class EthernautDeployer:
         helper = CheckSizeContract.deploy()
         sizeCheck = helper.checkSize(contract.solver())
 
-        print(sizeCheck)        
-        print("resultEncodedCall: ", decodedData)
 
-        assert sizeCheck == True, "Your contract must consist of maximum 10 opcodes"
+        assert sizeCheck <= 10, "Your contract must consist of maximum 10 opcodes"
         assert decodedData == 42, "Contract must receive '42' as the answer."
         print("Nice! You have talent to assembly!")
         print("Level 18 passed")
         
     def check_lv19(self, contract: AlienCodex):
-        print(contract.owner())
         assert contract.owner() == self.attacker.address, "You are still not the owner!"
         print("Congratulations! You really become good at overflows/underflows")
         print("Level 19 passed")

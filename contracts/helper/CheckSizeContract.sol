@@ -3,13 +3,9 @@ pragma solidity ^0.8.0;
 
 
 contract CheckSizeContract {
-  function checkSize(address solver) view public returns(bool) {
-    uint256 size;
+  function checkSize(address solver) view public returns(uint256 size) {
     assembly {
         size := extcodesize(solver)
     }
-    if (size > 10) return false;
-    else return true;
-
   }
 }
