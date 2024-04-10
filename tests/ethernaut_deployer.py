@@ -190,7 +190,7 @@ class EthernautDeployer:
         
     def check_lv15(self, contract):
         return 
-    
+
     def check_lv28(self, contract: GatekeeperThree):
         assert contract.entrant() == self.attacker.address, "You must pass the gatekeeper."
         print("Your are becomming a gatekeeper yourself ...")
