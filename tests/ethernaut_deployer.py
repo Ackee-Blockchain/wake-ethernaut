@@ -23,6 +23,7 @@ from pytypes.contracts.lv16_preservation import Preservation, LibraryContract
 from pytypes.contracts.lv17_recovery import Recovery
 from pytypes.contracts.lv18_magic_num import MagicNum
 from pytypes.contracts.lv19_alien_code import AlienCodex
+from pytypes.contracts.lv20_denial import Denial
 from pytypes.contracts.helper.Deployer import Deployer
 from pytypes.contracts.helper.CheckSizeContract import CheckSizeContract
 from pathlib import Path
@@ -118,6 +119,9 @@ class EthernautDeployer:
         bytecode_for_lv19 = bytes.fromhex((Path(__file__).parent.parent / "others" / "AlienCodex.bin").read_text())
         deployer = Deployer.deploy()
         return AlienCodex(deployer.deploy_(bytecode_for_lv19).return_value)
+    
+    def deploy_lv20(self):
+        return Denial.deploy(from_=self.owner) 
 
     def check_attacker_is(self, contract_owner: Account, msg = "owner"):
         assert contract_owner == self.attacker.address, f"You must take the {msg}ship."
@@ -228,10 +232,8 @@ class EthernautDeployer:
         encodedCall = Abi.encode_with_signature("whatIsTheMeaningOfLife()", [], [])
         resultEncodedCall = Account(contract.solver(), chain=default_chain).call(data=encodedCall)
         (decodedData,) = Abi.decode(data=resultEncodedCall,types=['uint256'])
-
         helper = CheckSizeContract.deploy()
         sizeCheck = helper.checkSize(contract.solver())
-
 
         assert sizeCheck <= 10, "Your contract must consist of maximum 10 opcodes"
         assert decodedData == 42, "Contract must receive '42' as the answer."
@@ -242,3 +244,12 @@ class EthernautDeployer:
         assert contract.owner() == self.attacker.address, "You are still not the owner!"
         print("Congratulations! You really become good at overflows/underflows")
         print("Level 19 passed")
+
+    def check_lv20(self, contract: Denial):
+        contract.transact(value=100000000, from_=self.owner)
+        balance_before_withdraw = self.owner.balance
+        contract.withdraw()
+        assert balance_before_withdraw == self.owner.balance, "Owner receives his funds :("
+        print("Good! You drained all available gas for transaction.")
+        print("Level 20 passed")
+
