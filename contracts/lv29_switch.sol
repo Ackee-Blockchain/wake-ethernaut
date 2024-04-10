@@ -24,8 +24,6 @@ contract Switch {
     }
 
     function flipSwitch(bytes memory _data) public onlyOff {
-        // reentrant call to itself
-
         (bool success,) = address(this).call(_data);
         require(success, "call failed :(");
     }
