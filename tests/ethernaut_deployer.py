@@ -188,6 +188,6 @@ class EthernautDeployer:
         return 
     
     def check_lv29(self, contract: Switch):
-        assert contract.switchOn == True, "You must turn the switch on."
+        assert contract.switchOn() == True, "You must turn the switch on."
         print("You have turned the switch on.")
         print("Level 29 passed")

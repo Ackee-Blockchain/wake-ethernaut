@@ -43,4 +43,4 @@ def exploit_lv29(contract: Switch):
 
     calldata = bytes.fromhex(calldata)
 
-    contract.call(data=calldata)
+    contract.transact(data=calldata)
