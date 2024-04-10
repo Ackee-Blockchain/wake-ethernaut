@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.0;
+// solc set explicitly to 0.8.0 to avoid anvil issues
+// this does not affect the solution
 
 contract Switch {
     bool public switchOn; // switch is off
