@@ -24,6 +24,7 @@ from pytypes.contracts.lv17_recovery import Recovery
 from pytypes.contracts.lv18_magic_num import MagicNum
 from pytypes.contracts.lv19_alien_code import AlienCodex
 from pytypes.contracts.lv20_denial import Denial
+from pytypes.contracts.lv21_shop import Shop
 from pytypes.contracts.helper.Deployer import Deployer
 from pytypes.contracts.helper.CheckSizeContract import CheckSizeContract
 from pathlib import Path
@@ -122,6 +123,9 @@ class EthernautDeployer:
     
     def deploy_lv20(self):
         return Denial.deploy(from_=self.owner) 
+    
+    def deploy_lv21(self):
+        return Shop.deploy(from_=self.owner)
 
     def check_attacker_is(self, contract_owner: Account, msg = "owner"):
         assert contract_owner == self.attacker.address, f"You must take the {msg}ship."
@@ -252,4 +256,9 @@ class EthernautDeployer:
         assert balance_before_withdraw == self.owner.balance, "Owner receives his funds :("
         print("Good! You drained all available gas for transaction.")
         print("Level 20 passed")
-
+    
+    def check_lv21(self, contract: Shop):
+        assert (contract.isSold() == False), "Product has not been bought!"
+        assert (contract.price() == 100), "The price changed during the purchase"
+        print("Nicely Done! You have deceived the shop")
+        print("Level 21 passed") 
