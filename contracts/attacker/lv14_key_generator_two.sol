@@ -6,7 +6,7 @@ interface GatekeeperTwo {
 }
 
 
-contract AttackGatekeeperTwo {
+contract GatekeeperTwoHelper {
   address private _victimAddress;
   bytes8 private _exploitValue;
 

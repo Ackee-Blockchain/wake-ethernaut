@@ -1,7 +1,7 @@
 from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
 from pytypes.contracts.lv17_recovery import Recovery
-from pytypes.contracts.attacker.lv17_recovery import AttackRecovery
+from pytypes.contracts.attacker.lv17_generator_of_created_address import AddressGenerator
 
 
 @default_chain.connect()
@@ -12,7 +12,10 @@ def test_lv17():
     ethernaut.check_lv17(contract,  foundContract)
 
 def exploit_lv17(contract: Recovery, attacker: Account) -> Address:
-    helperContract = AttackRecovery.deploy()
+    # Attack vector:
+    # Training:
+
+    helperContract = AddressGenerator.deploy()
     addressOfLostContract = helperContract.generateAddress(contract.address) 
     helperContract.destroyContract(addressOfLostContract)
     return addressOfLostContract

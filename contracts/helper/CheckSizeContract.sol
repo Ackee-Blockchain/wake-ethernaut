@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 
-contract HelperMagicNum {
+contract CheckSizeContract {
   function checkSize(address solver) view public returns(bool) {
     uint256 size;
     assembly {

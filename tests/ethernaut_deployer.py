@@ -1,3 +1,4 @@
+import os
 import random
 import string
 
@@ -21,9 +22,10 @@ from pytypes.contracts.lv15_naught_coin import NaughtCoin
 from pytypes.contracts.lv16_preservation import Preservation, LibraryContract
 from pytypes.contracts.lv17_recovery import Recovery
 from pytypes.contracts.lv18_magic_num import MagicNum
-from pytypes.contracts.attacker.lv18_magic_num import AttackMagicNum
-from pytypes.contracts.helper.lv18_helper_magic_num import HelperMagicNum
-
+from pytypes.contracts.lv19_alien_code import AlienCodex
+from pytypes.contracts.helper.Deployer import Deployer
+from pytypes.contracts.helper.CheckSizeContract import CheckSizeContract
+from pathlib import Path
 
 
 class EthernautDeployer:
@@ -111,6 +113,11 @@ class EthernautDeployer:
     
     def deploy_lv18(self):
         return MagicNum.deploy(from_=self.owner) 
+    
+    def deploy_lv19(self):
+        bytecode_for_lv19 = bytes.fromhex((Path(__file__).parent.parent / "others" / "AlienCodex.bin").read_text())
+        deployer = Deployer.deploy()
+        return AlienCodex(deployer.deploy_(bytecode_for_lv19).return_value)
 
     def check_attacker_is(self, contract_owner: Account, msg = "owner"):
         assert contract_owner == self.attacker.address, f"You must take the {msg}ship."
@@ -222,7 +229,7 @@ class EthernautDeployer:
         resultEncodedCall = Account(contract.solver(), chain=default_chain).call(data=encodedCall)
         (decodedData,) = Abi.decode(data=resultEncodedCall,types=['uint256'])
 
-        helper = HelperMagicNum.deploy()
+        helper = CheckSizeContract.deploy()
         sizeCheck = helper.checkSize(contract.solver())
 
         print(sizeCheck)        
@@ -233,4 +240,8 @@ class EthernautDeployer:
         print("Nice! You have talent to assembly!")
         print("Level 18 passed")
         
-
+    def check_lv19(self, contract: AlienCodex):
+        print(contract.owner())
+        assert contract.owner() == self.attacker.address, "You are still not the owner!"
+        print("Congratulations! You really become good at overflows/underflows")
+        print("Level 19 passed")

