@@ -19,7 +19,6 @@ contract Switch {
         assembly {
             calldatacopy(selector, 68, 4) // grab function selector from calldata
         }
-        // check that the first 4 bytes of the calldata is the offSelector
         require(selector[0] == offSelector, "Can only call the turnOffSwitch function");
         _;
     }
