@@ -25,6 +25,7 @@ from pytypes.contracts.lv18_magic_number import MagicNum
 from pytypes.contracts.lv19_alien_codex import AlienCodex
 from pytypes.contracts.lv20_denial import Denial
 from pytypes.contracts.lv21_shop import Shop
+from pytypes.contracts.lv22_dex import Dex, SwappableToken
 from pytypes.contracts.lv23_dex_two import DexTwo, SwappableTokenTwo
 from pytypes.contracts.lv28_gatekeeper_three import GatekeeperThree
 from pytypes.contracts.lv29_switch import Switch
@@ -120,6 +121,7 @@ class EthernautDeployer:
         return MagicNum.deploy(from_=self.owner) 
     
     def deploy_lv19(self):
+        # must be deployed from source due to version unsupported by wake framework (lower than 0.6.2)
         source = Path(__file__).parent.parent / "bin" / "AlienCodex.bin"
         bytecode_for_lv19 = bytes.fromhex(source.read_text())
         deployer = Deployer.deploy()
@@ -131,24 +133,32 @@ class EthernautDeployer:
     def deploy_lv21(self):
         return Shop.deploy(from_=self.owner)
 
-    def deploy_lv23(self):
-        dex = DexTwo.deploy(from_=self.owner)
-
-        token1 = SwappableTokenTwo.deploy(dex.address, "Token 1", "TKN1", 110, from_=self.owner)
-        token2 = SwappableTokenTwo.deploy(dex.address, "Token 2", "TKN2", 110, from_=self.owner)
-
+    def deploy_lv22(self):
+        dex = Dex.deploy(from_=self.owner)
+        token1 = SwappableToken.deploy(dex.address, "Token 1", "TKN1", 110, from_=self.owner)
+        token2 = SwappableToken.deploy(dex.address, "Token 2", "TKN2", 110, from_=self.owner)
         dex.setTokens(token1.address, token2.address, from_=self.owner)
-
-        token1.approve(self.owner, dex.address, 100, from_=self.owner)
-        token2.approve(self.owner, dex.address, 100, from_=self.owner)
-
-        dex.add_liquidity(token1.address, 100, from_=self.owner)
-        dex.add_liquidity(token2.address, 100, from_=self.owner)
-
+        dex.approve(dex.address, 100, from_=self.owner)
+        dex.addLiquidity(token1.address, 100, from_=self.owner)
+        dex.addLiquidity(token2.address, 100, from_=self.owner)
         token1.transfer(self.attacker, 10, from_=self.owner)
         token2.transfer(self.attacker, 10, from_=self.owner)
-
         return dex
+
+    def deploy_lv23(self):
+        dex = DexTwo.deploy(from_=self.owner)
+        token1 = SwappableTokenTwo.deploy(dex.address, "Token 1", "TKN1", 110, from_=self.owner)
+        token2 = SwappableTokenTwo.deploy(dex.address, "Token 2", "TKN2", 110, from_=self.owner)
+        dex.setTokens(token1.address, token2.address, from_=self.owner)
+        dex.approve(dex.address, 100, from_=self.owner)
+        dex.add_liquidity(token1.address, 100, from_=self.owner)
+        dex.add_liquidity(token2.address, 100, from_=self.owner)
+        token1.transfer(self.attacker, 10, from_=self.owner)
+        token2.transfer(self.attacker, 10, from_=self.owner)
+        return dex
+    
+    def deploy_lv24(self):
+        return
     
     def deploy_lv28(self):
         return GatekeeperThree.deploy(from_=self.owner)
@@ -261,7 +271,6 @@ class EthernautDeployer:
         print("Level 17 passed") 
 
     def check_lv18(self, contract: MagicNum):
-        
         encodedCall = Abi.encode_with_signature("whatIsTheMeaningOfLife()", [], [])
         resultEncodedCall = Account(contract.solver(), chain=default_chain).call(data=encodedCall)
         (decodedData,) = Abi.decode(data=resultEncodedCall,types=['uint256'])
@@ -290,13 +299,22 @@ class EthernautDeployer:
         assert (contract.isSold() == False), "Product has not been bought!"
         assert (contract.price() == 100), "The price changed during the purchase"
         print("Nicely Done! You have deceived the shop")
-        print("Level 21 passed") 
+        print("Level 21 passed")
+
+    def check_lv22(self, contract: Dex):
+        print("DEX's balance: \n\tToken1: ", contract.balanceOf(contract.token1(), contract.address), "\n\tToken2: ", contract.balanceOf(contract.token2(), contract.address))
+        assert (contract.balanceOf(contract.token1(), contract.address) == 0 or contract.balanceOf(contract.token2(), contract.address) == 0), "You must drain all the Tokens 1 or all the Tokens 2."
+        print("Well done! You are one stop closer to become DeFi master.")
+        print("Level 22 passed")
 
     def check_lv23(self, contract: DexTwo):
-        assert SwappableTokenTwo(contract.token1()).balanceOf(contract.address) == 0, "You must drain all the Token 1 balance."
-        assert SwappableTokenTwo(contract.token2()).balanceOf(contract.address) == 0, "You must drain all the Token 2 balance."
-        print("Perfectly performed heist! You robbed the Dex to the last penny.")
+        print("DEX's balance: \n\tToken1: ", contract.balanceOf(contract.token1(), contract.address), "\n\tToken2: ", contract.balanceOf(contract.token2(), contract.address))
+        assert (contract.balanceOf(contract.token1(), contract.address) == 0 and contract.balanceOf(contract.token2(), contract.address) == 0), "You must drain all the Tokens 1 and all the Tokens 2."
+        print("Perfectly performed heist! You robbed the DEX to the last penny.")
         print("Level 23 passed")
+        
+    def check_lv24(self, contract):
+        pass
 
     def check_lv28(self, contract: GatekeeperThree):
         assert contract.entrant() == self.attacker.address, "You must pass the gatekeeper."
