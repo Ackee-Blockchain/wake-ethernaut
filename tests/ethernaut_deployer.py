@@ -25,6 +25,7 @@ from pytypes.contracts.lv18_magic_num import MagicNum
 from pytypes.contracts.lv19_alien_code import AlienCodex
 from pytypes.contracts.lv20_denial import Denial
 from pytypes.contracts.lv21_shop import Shop
+from pytypes.contracts.lv22_dex import Dex, SwappableToken
 from pytypes.contracts.helper.Deployer import Deployer
 from pytypes.contracts.helper.CheckSizeContract import CheckSizeContract
 from pathlib import Path
@@ -126,6 +127,20 @@ class EthernautDeployer:
     
     def deploy_lv21(self):
         return Shop.deploy(from_=self.owner)
+    
+    def deploy_lv22(self):
+        dex = Dex.deploy(from_=self.owner)
+        token1 = SwappableToken.deploy(dexInstance = dex.address, name="AG1", symbol="AG1", initialSupply= 110, from_=self.owner)
+        token2 = SwappableToken.deploy(dexInstance = dex.address, name="AG2", symbol="AG2", initialSupply= 110, from_=self.owner)
+        dex.setTokens(token1.address, token2.address,from_=self.owner)
+        dex.approve(dex.address, amount=100, from_=self.owner)
+        dex.addLiquidity(token_address=token1.address, amount=100, from_=self.owner)
+        dex.addLiquidity(token_address=token2.address, amount=100, from_=self.owner)
+        token1.transfer(to_=self.attacker,value_=10,from_=self.owner)
+        token2.transfer(to_=self.attacker,value_=10,from_=self.owner)
+        return (dex, token1, token2) 
+
+        
 
     def check_attacker_is(self, contract_owner: Account, msg = "owner"):
         assert contract_owner == self.attacker.address, f"You must take the {msg}ship."
@@ -262,3 +277,9 @@ class EthernautDeployer:
         assert (contract.price() == 100), "The price changed during the purchase"
         print("Nicely Done! You have deceived the shop")
         print("Level 21 passed") 
+
+    def check_lv22(self, contract: Dex, token1: SwappableToken, token2: SwappableToken ):
+        assert (contract.balanceOf(token=token1.address,account=contract.address) == 0 or contract.balanceOf(token=token2.address,account=contract.address) == 0), "You have not drained DEX :("
+        print("Tokens on Dex: \n\tToken1:",contract.balanceOf(token=token1.address,account=contract.address), "\n\tToken2: ", contract.balanceOf(token=token2.address,account=contract.address) )
+        print("Well done! You are one stop closer to become DeFi master.")
+        print("Level 22 passed")
