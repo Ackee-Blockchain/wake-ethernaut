@@ -2,8 +2,6 @@ from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
 from pytypes.contracts.lv29_switch import Switch
 
-# TODO You can import your our own smart contract(s) here.
-
 @default_chain.connect()
 def test_lv29():
     ethernaut = EthernautDeployer(default_chain)

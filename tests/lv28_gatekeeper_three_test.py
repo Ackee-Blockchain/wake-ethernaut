@@ -2,7 +2,6 @@ from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
 from pytypes.contracts.lv28_gatekeeper_three import GatekeeperThree, SimpleTrick
 from pytypes.contracts.attacker.lv28_gatekeeper_three_attacker import GatekeeperThreeAttacker
-# TODO You can import your our own smart contract(s) here.
 
 @default_chain.connect()
 def test_lv28():
