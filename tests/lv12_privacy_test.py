@@ -2,7 +2,6 @@ from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
 from pytypes.contracts.lv12_privacy import Privacy
 
-
 @default_chain.connect()
 def test_lv12():
     ethernaut = EthernautDeployer(default_chain)
