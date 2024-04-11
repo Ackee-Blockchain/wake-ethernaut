@@ -17,6 +17,7 @@ from pytypes.contracts.lv11_elevator import Elevator
 from pytypes.contracts.lv12_privacy import Privacy
 from pytypes.contracts.lv13_gatekeeper_one import GatekeeperOne
 from pytypes.contracts.lv14_gatekeeper_two import GatekeeperTwo
+from pytypes.contracts.lv23_dex_two import DexTwo, SwappableTokenTwo
 from pytypes.contracts.lv28_gatekeeper_three import GatekeeperThree
 from pytypes.contracts.lv29_switch import Switch
 
@@ -92,6 +93,25 @@ class EthernautDeployer:
     
     def deploy_lv15(self):
         return
+    
+    def deploy_lv23(self):
+        dex = DexTwo.deploy(from_=self.owner)
+
+        token1 = SwappableTokenTwo.deploy(dex.address, "Token 1", "TKN1", 110, from_=self.owner)
+        token2 = SwappableTokenTwo.deploy(dex.address, "Token 2", "TKN2", 110, from_=self.owner)
+
+        dex.setTokens(token1.address, token2.address, from_=self.owner)
+
+        token1.approve(self.owner, dex.address, 100, from_=self.owner)
+        token2.approve(self.owner, dex.address, 100, from_=self.owner)
+
+        dex.add_liquidity(token1.address, 100, from_=self.owner)
+        dex.add_liquidity(token2.address, 100, from_=self.owner)
+
+        token1.transfer(self.attacker, 10, from_=self.owner)
+        token2.transfer(self.attacker, 10, from_=self.owner)
+
+        return dex
     
     def deploy_lv28(self):
         return GatekeeperThree.deploy(from_=self.owner)
@@ -190,6 +210,12 @@ class EthernautDeployer:
         
     def check_lv15(self, contract):
         return 
+        
+    def check_lv23(self, contract: DexTwo):
+        assert SwappableTokenTwo(contract.token1()).balanceOf(contract.address) == 0, "You must drain all the Token 1 balance."
+        assert SwappableTokenTwo(contract.token2()).balanceOf(contract.address) == 0, "You must drain all the Token 2 balance."
+        print("Perfectly performed heist! You robbed the Dex to the last penny.")
+        print("Level 23 passed")
 
     def check_lv28(self, contract: GatekeeperThree):
         assert contract.entrant() == self.attacker.address, "You must pass the gatekeeper."

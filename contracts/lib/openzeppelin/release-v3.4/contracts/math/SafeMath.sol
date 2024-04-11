@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// wake-disable
+// OpenZeppelin Contracts v3.4 (math/SafeMath.sol)
 
 pragma solidity >=0.6.0 <0.8.0;
 
