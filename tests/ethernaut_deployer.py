@@ -1,3 +1,4 @@
+import os
 import random
 import string
 
@@ -17,9 +18,20 @@ from pytypes.contracts.lv11_elevator import Elevator
 from pytypes.contracts.lv12_privacy import Privacy
 from pytypes.contracts.lv13_gatekeeper_one import GatekeeperOne
 from pytypes.contracts.lv14_gatekeeper_two import GatekeeperTwo
+from pytypes.contracts.lv15_naught_coin import NaughtCoin
+from pytypes.contracts.lv16_preservation import Preservation, LibraryContract
+from pytypes.contracts.lv17_recovery import Recovery
+from pytypes.contracts.lv18_magic_number import MagicNum
+from pytypes.contracts.lv19_alien_codex import AlienCodex
+from pytypes.contracts.lv20_denial import Denial
+from pytypes.contracts.lv21_shop import Shop
 from pytypes.contracts.lv23_dex_two import DexTwo, SwappableTokenTwo
 from pytypes.contracts.lv28_gatekeeper_three import GatekeeperThree
 from pytypes.contracts.lv29_switch import Switch
+from pytypes.contracts.helper.Deployer import Deployer
+from pytypes.contracts.helper.CheckSizeContract import CheckSizeContract
+from pathlib import Path
+
 
 class EthernautDeployer:
     chain: Chain
@@ -92,8 +104,33 @@ class EthernautDeployer:
         return GatekeeperTwo.deploy(from_= self.owner)
     
     def deploy_lv15(self):
-        return
+        return NaughtCoin.deploy(_player= self.attacker, from_=self.owner) 
     
+    def deploy_lv16(self):
+        library1address = LibraryContract.deploy(from_=self.owner)
+        library2address = LibraryContract.deploy(from_=self.owner)
+        return Preservation.deploy(_timeZone1LibraryAddress=library1address, _timeZone2LibraryAddress=library2address, from_=self.owner) 
+    
+    def deploy_lv17(self):
+        RecoveryContract = Recovery.deploy(from_=self.owner)
+        RecoveryContract.generateToken(_name = "UKN", _initialSupply = 1000, from_=self.owner)
+        return  RecoveryContract
+    
+    def deploy_lv18(self):
+        return MagicNum.deploy(from_=self.owner) 
+    
+    def deploy_lv19(self):
+        source = Path(__file__).parent.parent / "bin" / "AlienCodex.bin"
+        bytecode_for_lv19 = bytes.fromhex(source.read_text())
+        deployer = Deployer.deploy()
+        return AlienCodex(deployer.deployCode(bytecode_for_lv19).return_value)
+    
+    def deploy_lv20(self):
+        return Denial.deploy(from_=self.owner) 
+    
+    def deploy_lv21(self):
+        return Shop.deploy(from_=self.owner)
+
     def deploy_lv23(self):
         dex = DexTwo.deploy(from_=self.owner)
 
@@ -118,7 +155,7 @@ class EthernautDeployer:
     
     def deploy_lv29(self):
         return Switch.deploy(from_=self.owner) 
-    
+
     def check_attacker_is(self, contract_owner: Account, msg = "owner"):
         assert contract_owner == self.attacker.address, f"You must take the {msg}ship."
         print(f"You are the {msg} now.")
@@ -208,9 +245,53 @@ class EthernautDeployer:
         print("You are becoming good at bribing these gatekeepers.")
         print("Level 14 passed")
         
-    def check_lv15(self, contract):
-        return 
+    def check_lv15(self, contract: NaughtCoin):
+        assert contract.balanceOf(self.attacker.address) == 0, "You must withdraw all your assets."
+        print("Nice! You figured out some features of ERC20")
+        print("Level 15 passed")
+
+    def check_lv16(self, contract: Preservation):
+        assert contract.owner() == self.attacker.address, "You must take ownership."
+        print("Gotcha! You are becoming really good in understanding delegate calls.")
+        print("Level 16 passed")
+
+    def check_lv17(self, contract: Recovery, lostAddress: Address):
+        assert get_create_address(contract.address, contract.nonce-1) == lostAddress, "You must find the lost address"
+        print("Well done! You are a big fan of Yellow paper!")
+        print("Level 17 passed") 
+
+    def check_lv18(self, contract: MagicNum):
         
+        encodedCall = Abi.encode_with_signature("whatIsTheMeaningOfLife()", [], [])
+        resultEncodedCall = Account(contract.solver(), chain=default_chain).call(data=encodedCall)
+        (decodedData,) = Abi.decode(data=resultEncodedCall,types=['uint256'])
+        helper = CheckSizeContract.deploy()
+        sizeCheck = helper.checkSize(contract.solver())
+
+        assert sizeCheck <= 10, "Your contract must consist of maximum 10 opcodes"
+        assert decodedData == 42, "Contract must receive '42' as the answer."
+        print("Nice! You have talent to assembly!")
+        print("Level 18 passed")
+        
+    def check_lv19(self, contract: AlienCodex):
+        assert contract.owner() == self.attacker.address, "You are still not the owner!"
+        print("Congratulations! You really become good at overflows/underflows")
+        print("Level 19 passed")
+
+    def check_lv20(self, contract: Denial):
+        contract.transact(value=100000000, from_=self.owner)
+        balance_before_withdraw = self.owner.balance
+        contract.withdraw()
+        assert balance_before_withdraw == self.owner.balance, "Owner receives his funds :("
+        print("Good! You drained all available gas for transaction.")
+        print("Level 20 passed")
+    
+    def check_lv21(self, contract: Shop):
+        assert (contract.isSold() == False), "Product has not been bought!"
+        assert (contract.price() == 100), "The price changed during the purchase"
+        print("Nicely Done! You have deceived the shop")
+        print("Level 21 passed") 
+
     def check_lv23(self, contract: DexTwo):
         assert SwappableTokenTwo(contract.token1()).balanceOf(contract.address) == 0, "You must drain all the Token 1 balance."
         assert SwappableTokenTwo(contract.token2()).balanceOf(contract.address) == 0, "You must drain all the Token 2 balance."

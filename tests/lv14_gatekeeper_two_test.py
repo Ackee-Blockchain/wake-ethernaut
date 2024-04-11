@@ -1,7 +1,7 @@
 from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
 from pytypes.contracts.lv14_gatekeeper_two import GatekeeperTwo
-# TODO You can import your our own smart contract(s) here.
+from pytypes.contracts.attacker.lv14_key_generator_two import GatekeeperTwoHelper
 
 @default_chain.connect()
 def test_lv14():
@@ -11,7 +11,7 @@ def test_lv14():
     ethernaut.check_lv14(contract)
 
 def exploit_lv14(contract: GatekeeperTwo):
-    # TODO ?
-    # TODO You can import your our own smart contract(s) here.
-    # TODO Code here ...
-    pass
+    # Attack vector:
+    # Training:
+    GatekeeperTwoHelper.deploy(victimAddress=contract.address)
+
