@@ -1,6 +1,6 @@
 from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
-from pytypes.contracts.lv28_gatekeeper_three import GatekeeperThree, SimpleTrick
+from pytypes.contracts.lv28_gatekeeper_three import GatekeeperThree
 from pytypes.contracts.attacker.lv28_gatekeeper_three_attacker import GatekeeperThreeAttacker
 
 @default_chain.connect()
