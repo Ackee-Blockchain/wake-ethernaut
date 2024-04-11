@@ -17,7 +17,7 @@ from pytypes.contracts.lv11_elevator import Elevator
 from pytypes.contracts.lv12_privacy import Privacy
 from pytypes.contracts.lv13_gatekeeper_one import GatekeeperOne
 from pytypes.contracts.lv14_gatekeeper_two import GatekeeperTwo
-from pytypes.contracts.lv28_gatekeeper_three import GatekeeperThree, SimpleTrick
+from pytypes.contracts.lv28_gatekeeper_three import GatekeeperThree
 from pytypes.contracts.lv29_switch import Switch
 
 class EthernautDeployer:
