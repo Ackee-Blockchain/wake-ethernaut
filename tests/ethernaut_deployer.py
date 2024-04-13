@@ -176,7 +176,7 @@ class EthernautDeployer:
     
     def deploy_lv29(self):
         return Switch.deploy(from_=self.owner) 
-    
+
     def check_attacker_is(self, contract_owner: Account, msg = "owner"):
         assert contract_owner == self.attacker.address, f"You must take the {msg}ship."
         print(f"You are the {msg} now.")
@@ -353,7 +353,3 @@ class EthernautDeployer:
         assert contract.switchOn() == True, "You must turn the switch on."
         print("You have turned the switch on.")
         print("Level 29 passed")
-    def check_lv15(self, contract):
-        return
-
-  
