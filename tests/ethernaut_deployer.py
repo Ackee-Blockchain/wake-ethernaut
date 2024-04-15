@@ -27,6 +27,7 @@ from pytypes.contracts.lv20_denial import Denial
 from pytypes.contracts.lv21_shop import Shop
 from pytypes.contracts.lv22_dex import Dex, SwappableToken
 from pytypes.contracts.lv23_dex_two import DexTwo, SwappableTokenTwo
+from pytypes.contracts.lv27_good_samaritan import GoodSamaritan
 from pytypes.contracts.lv26_double_entry_point import Forta, CryptoVault, LegacyToken, DoubleEntryPoint, DelegateERC20
 from pytypes.contracts.lv28_gatekeeper_three import GatekeeperThree
 from pytypes.contracts.lv29_switch import Switch
@@ -161,6 +162,9 @@ class EthernautDeployer:
     def deploy_lv24(self):
         return
     
+    def deploy_lv27(self):
+        return GoodSamaritan.deploy(from_=self.owner)
+
     def deploy_lv26(self):
         old_legacy_token = LegacyToken.deploy(from_=self.owner)
         forta = Forta.deploy(from_=self.owner)
@@ -175,8 +179,8 @@ class EthernautDeployer:
         return GatekeeperThree.deploy(from_=self.owner)
     
     def deploy_lv29(self):
-        return Switch.deploy(from_=self.owner) 
-
+        return Switch.deploy(from_=self.owner)
+      
     def check_attacker_is(self, contract_owner: Account, msg = "owner"):
         assert contract_owner == self.attacker.address, f"You must take the {msg}ship."
         print(f"You are the {msg} now.")
@@ -287,7 +291,6 @@ class EthernautDeployer:
         (decodedData,) = Abi.decode(data=resultEncodedCall,types=['uint256'])
         helper = CheckSizeContract.deploy()
         sizeCheck = helper.checkSize(contract.solver())
-
         assert sizeCheck <= 10, "Your contract must consist of maximum 10 opcodes"
         assert decodedData == 42, "Contract must receive '42' as the answer."
         print("Nice! You have talent to assembly!")
@@ -326,6 +329,10 @@ class EthernautDeployer:
         
     def check_lv24(self, contract):
         pass
+
+    def check_lv27(self, contract: GoodSamaritan):
+        assert contract.coin().balances(contract.wallet()) == 0
+        print("Level 27 passed.")
 
     def check_lv26(self, contract):
         instance: DoubleEntryPoint = DoubleEntryPoint(contract)
