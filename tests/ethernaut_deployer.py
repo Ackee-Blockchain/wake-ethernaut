@@ -27,6 +27,7 @@ from pytypes.contracts.lv20_denial import Denial
 from pytypes.contracts.lv21_shop import Shop
 from pytypes.contracts.lv22_dex import Dex, SwappableToken
 from pytypes.contracts.lv23_dex_two import DexTwo, SwappableTokenTwo
+from pytypes.contracts.lv24_puzzle_wallet import PuzzleWallet, PuzzleProxy
 from pytypes.contracts.lv27_good_samaritan import GoodSamaritan
 from pytypes.contracts.lv26_double_entry_point import Forta, CryptoVault, LegacyToken, DoubleEntryPoint, DelegateERC20
 from pytypes.contracts.lv28_gatekeeper_three import GatekeeperThree
@@ -160,6 +161,15 @@ class EthernautDeployer:
         return dex
     
     def deploy_lv24(self):
+        wallet_logic = PuzzleWallet.deploy(from_=self.owner)
+        data = Abi.encode_with_selector(PuzzleWallet.init.selector, ['uint256'], [0]) 
+        proxy = PuzzleProxy.deploy(self.owner.address, wallet_logic.address, data, from_=self.owner)
+        instance = PuzzleWallet(proxy.address)
+        instance.addToWhitelist(self.owner.address, from_=self.owner)
+        instance.deposit(value=10 * 10**18, from_=self.owner)
+        return proxy
+    
+    def deploy_lv25(self):
         return
     
     def deploy_lv27(self):
@@ -172,18 +182,22 @@ class EthernautDeployer:
         new_token = DoubleEntryPoint.deploy(old_legacy_token.address, crypto_vault.address, forta.address, self.attacker.address, from_=self.owner)
         crypto_vault.setUnderlying(new_token.address, from_=self.owner)
         old_legacy_token.delegateToNewContract(DelegateERC20(new_token), from_=self.owner)
-        old_legacy_token.mint(crypto_vault.address, 100*10**18, from_=self.owner)
+        old_legacy_token.mint(crypto_vault.address, 100 * 10**18, from_=self.owner)
         return new_token
     
     def deploy_lv28(self):
         return GatekeeperThree.deploy(from_=self.owner)
     
     def deploy_lv29(self):
+        return Switch.deploy(from_=self.owner) 
+
+    def check_attacker_is(self, contract_owner: Account, must = "You must take the ownership.", done = "You are the owner now."):
+        assert contract_owner == self.attacker.address, must
+        print(done)
+        
+    def check_attacker_is_entrant(self, entrant: Account):
+        self.check_attacker_is(entrant, "You must pass the gatekeeper.", "You passed the gate.")
         return Switch.deploy(from_=self.owner)
-      
-    def check_attacker_is(self, contract_owner: Account, msg = "owner"):
-        assert contract_owner == self.attacker.address, f"You must take the {msg}ship."
-        print(f"You are the {msg} now.")
     
     def check_lv00(self, contract: Tutorial):
         assert contract.getCleared(), "You must hack the authentication."
@@ -261,12 +275,12 @@ class EthernautDeployer:
         print("Level 12 passed")
         
     def check_lv13(self, contract: GatekeeperOne):
-        assert contract.entrant() == self.attacker.address, "You must pass the gatekeeper."
+        self.check_attacker_is_entrant(contract.entrant())
         print("Well done! Your hacker skills are on the rise!")
         print("Level 13 passed")
         
     def check_lv14(self, contract: GatekeeperTwo):
-        assert contract.entrant() == self.attacker.address, "You must pass the gatekeeper."
+        self.check_attacker_is_entrant(contract.entrant())
         print("You are becoming good at bribing these gatekeepers.")
         print("Level 14 passed")
         
@@ -276,12 +290,12 @@ class EthernautDeployer:
         print("Level 15 passed")
 
     def check_lv16(self, contract: Preservation):
-        assert contract.owner() == self.attacker.address, "You must take ownership."
+        self.check_attacker_is(contract.owner())
         print("Gotcha! You are becoming really good in understanding delegate calls.")
         print("Level 16 passed")
 
     def check_lv17(self, contract: Recovery, lostAddress: Address):
-        assert get_create_address(contract.address, contract.nonce-1) == lostAddress, "You must find the lost address"
+        assert get_create_address(contract.address, contract.nonce-1) == lostAddress, "You must find the lost address."
         print("Well done! You are a big fan of Yellow paper!")
         print("Level 17 passed") 
 
@@ -291,28 +305,28 @@ class EthernautDeployer:
         (decodedData,) = Abi.decode(data=resultEncodedCall,types=['uint256'])
         helper = CheckSizeContract.deploy()
         sizeCheck = helper.checkSize(contract.solver())
-        assert sizeCheck <= 10, "Your contract must consist of maximum 10 opcodes"
+        assert sizeCheck <= 10, "Your contract must consist of maximum 10 opcodes."
         assert decodedData == 42, "Contract must receive '42' as the answer."
         print("Nice! You have talent to assembly!")
         print("Level 18 passed")
         
     def check_lv19(self, contract: AlienCodex):
-        assert contract.owner() == self.attacker.address, "You are still not the owner!"
-        print("Congratulations! You really become good at overflows/underflows")
+        self.check_attacker_is(contract.owner())
+        print("Congratulations! You really become good at overflows/underflows.")
         print("Level 19 passed")
 
     def check_lv20(self, contract: Denial):
         contract.transact(value=100000000, from_=self.owner)
         balance_before_withdraw = self.owner.balance
         contract.withdraw()
-        assert balance_before_withdraw == self.owner.balance, "Owner receives his funds :("
+        assert balance_before_withdraw == self.owner.balance, "You must deny the owner from withdrawing funds."
         print("Good! You drained all available gas for transaction.")
         print("Level 20 passed")
     
     def check_lv21(self, contract: Shop):
         assert (contract.isSold() == False), "Product has not been bought!"
-        assert (contract.price() == 100), "The price changed during the purchase"
-        print("Nicely Done! You have deceived the shop")
+        assert (contract.price() == 100), "The price changed during the purchase."
+        print("Nicely Done! You have deceived the shop.")
         print("Level 21 passed")
 
     def check_lv22(self, contract: Dex):
@@ -327,18 +341,20 @@ class EthernautDeployer:
         print("Perfectly performed heist! You robbed the DEX to the last penny.")
         print("Level 23 passed")
         
-    def check_lv24(self, contract):
-        pass
-
-    def check_lv27(self, contract: GoodSamaritan):
-        assert contract.coin().balances(contract.wallet()) == 0
-        print("Level 27 passed.")
+    def check_lv24(self, contract: PuzzleProxy):
+        self.check_attacker_is(contract.admin(), "You must become the admin of the wallet.", "You are the admin now.")
+        assert contract.balance == 0, "You must drain all funds from the puzzle wallet."
+        print("Beautiful pickpocket! You disintegrated the puzzle wallet into the puzzle pieces.")
+        print("Level 24 passed")
+        
+    def check_lv25(self, contract):
+        print("Level 25 passed")
 
     def check_lv26(self, contract):
         instance: DoubleEntryPoint = DoubleEntryPoint(contract)
         forta: Forta = instance.forta()
         usersDetectionBot: Address = forta.usersDetectionBots(self.attacker).address
-        assert usersDetectionBot != 0, "DetectionBot did not set"
+        assert usersDetectionBot != 0, "You must set Detection Bot."
         vault: Address = instance.cryptoVault()
         cryptoVault: CryptoVault = CryptoVault(vault)
         try:
@@ -346,12 +362,15 @@ class EthernautDeployer:
                 cryptoVault.sweepToken(instance.delegatedFrom())
         except:
             raise AssertionError("CryptoVault's underlying token can't be swept.")
-        
-        assert instance.balanceOf(instance.cryptoVault()) > 0, "balance of DoubleEntryPointToken should not zero."
+        assert instance.balanceOf(instance.cryptoVault()) > 0, "Balance of DoubleEntryPointToken should not be zero."
         print("Level 26 passed.")
 
+    def check_lv27(self, contract: GoodSamaritan):
+        assert contract.coin().balances(contract.wallet()) == 0
+        print("Level 27 passed")
+
     def check_lv28(self, contract: GatekeeperThree):
-        assert contract.entrant() == self.attacker.address, "You must pass the gatekeeper."
+        self.check_attacker_is_entrant(contract.entrant())
         print("Your are becomming a gatekeeper yourself ...")
         print("Level 28 passed")
   

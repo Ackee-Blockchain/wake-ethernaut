@@ -12,6 +12,7 @@ def test_lv22():
 
 def exploit_lv22(contract: Dex, attacker: Account):
     # Attack vector: inteeger division (rounding down in favor of the attacker)
+    # Training: Learning how simple DEX works
     t1 = SwappableToken(contract.token1())
     t2 = SwappableToken(contract.token2())
     contract.approve(contract.address, 1000)

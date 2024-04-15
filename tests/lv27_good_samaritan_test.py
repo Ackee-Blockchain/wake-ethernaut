@@ -1,9 +1,7 @@
 from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
 from pytypes.contracts.lv27_good_samaritan import GoodSamaritan
-
 from pytypes.contracts.attacker.lv27_good_samaritan import Attacker
-
 
 @default_chain.connect()
 def test_lv27():

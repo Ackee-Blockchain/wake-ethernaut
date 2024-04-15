@@ -1,7 +1,6 @@
 from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
 from pytypes.contracts.lv26_double_entry_point import DoubleEntryPoint
-
 from pytypes.contracts.attacker.lv26_detection_bot import DetectionBot
 
 @default_chain.connect()
