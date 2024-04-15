@@ -334,13 +334,12 @@ class EthernautDeployer:
         assert usersDetectionBot != 0, "DetectionBot did not set"
         vault: Address = instance.cryptoVault()
         cryptoVault: CryptoVault = CryptoVault(vault)
-        result = 0
         try:
-            cryptoVault.sweepToken(instance.delegatedFrom())
-            result = 1
-        except Exception:
-            result = 0
-        assert result == 0, "Should sweepToken fail."
+            with must_revert():
+                cryptoVault.sweepToken(instance.delegatedFrom())
+        except:
+            raise AssertionError("CryptoVault's underlying token can't be swept.")
+        
         assert instance.balanceOf(instance.cryptoVault()) > 0, "balance of DoubleEntryPointToken should not zero."
         print("Level 26 passed.")
 
