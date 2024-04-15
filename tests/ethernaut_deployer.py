@@ -318,9 +318,8 @@ class EthernautDeployer:
     def check_lv24(self, contract):
         pass
 
-    def check_lv27(self, contract):
-        instance = GoodSamaritan(contract)
-        assert instance.coin().balances(instance.wallet()) == 0
+    def check_lv27(self, contract: GoodSamaritan):
+        assert contract.coin().balances(contract.wallet()) == 0
         print("Level 27 passed.")
 
     def check_lv28(self, contract: GatekeeperThree):
