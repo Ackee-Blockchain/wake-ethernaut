@@ -3,7 +3,7 @@ pragma solidity >=0.8.0 <0.9.0;
 
 import "../lv28_gatekeeper_three.sol";
 
-contract GatekeeperThreeAttacker {
+contract GateBreaker {
     GatekeeperThree target;
 
     constructor(address _target) {
@@ -26,7 +26,7 @@ contract GatekeeperThreeAttacker {
         }
     }
 
-    function enter () public {
+    function enter() public {
         target.enter();
     }
 

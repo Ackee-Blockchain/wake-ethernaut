@@ -15,5 +15,4 @@ contract GatekeeperTwoHelper {
     bytes8 payload = bytes8(uint64(bytes8(keccak256(abi.encodePacked(this)))) ^ type(uint64).max);
     GatekeeperTwo(_victimAddress).enter(payload);
   }
-
 }

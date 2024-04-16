@@ -1,7 +1,7 @@
 from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
 from pytypes.contracts.lv28_gatekeeper_three import GatekeeperThree
-from pytypes.contracts.attacker.lv28_gatekeeper_three_attacker import GatekeeperThreeAttacker
+from pytypes.contracts.attacker.lv28_gate_breaker import GateBreaker
 
 @default_chain.connect()
 def test_lv28():
@@ -16,7 +16,7 @@ def exploit_lv28(contract: GatekeeperThree):
     # Attack vector - gate 3: sending some ether to the contract and revert on receive()
     # Training: know what attacker can have under his controll
 
-    attacker = GatekeeperThreeAttacker.deploy(contract)
+    attacker = GateBreaker.deploy(contract)
     attacker.bypassGate1()
     attacker.bypassGate2()
     attacker.bypassGate3(value=10**18)

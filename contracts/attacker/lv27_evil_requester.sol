@@ -3,7 +3,7 @@ pragma solidity >=0.8.0 <0.9.0;
 
 import "../lv27_good_samaritan.sol";
 
-contract Attacker is INotifyable {
+contract EvilRequester is INotifyable {
     error NotEnoughBalance();
 
     GoodSamaritan goodSamaritan;

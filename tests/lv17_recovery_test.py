@@ -1,7 +1,7 @@
 from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
 from pytypes.contracts.lv17_recovery import Recovery
-from pytypes.contracts.attacker.lv17_generator_of_created_address import AddressGenerator
+from pytypes.contracts.attacker.lv17_address_generator import AddressGenerator
 
 @default_chain.connect()
 def test_lv17():

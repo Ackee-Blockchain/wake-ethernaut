@@ -1,7 +1,7 @@
 from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
 from pytypes.contracts.lv16_preservation import Preservation
-from pytypes.contracts.attacker.lv16_delegate_call_exploitation import AttackPreservation
+from pytypes.contracts.attacker.lv16_delegate_exploit import DelegateExploit
 
 @default_chain.connect()
 def test_lv16():
@@ -14,5 +14,5 @@ def exploit_lv16(contract: Preservation):
     # Attack vector: storage collisions => wrong usage of delegatecall
     # Training: understanding delegatecall and storage collisions
 
-    exploitContract = AttackPreservation.deploy(victimContract=contract.address)
+    exploitContract = DelegateExploit.deploy(victimContract=contract.address)
     exploitContract.exploit()

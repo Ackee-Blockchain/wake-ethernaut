@@ -1,7 +1,7 @@
 from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
 from pytypes.contracts.lv07_force import Force
-from pytypes.contracts.attacker.lv07_transfer import ForceTransfer
+from pytypes.contracts.attacker.lv07_force_transfer import ForceTransfer
 
 @default_chain.connect()
 def test_lv07():
