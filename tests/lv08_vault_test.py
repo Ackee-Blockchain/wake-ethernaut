@@ -11,8 +11,9 @@ def test_lv08():
     ethernaut.check_lv08(contract)
 
 def exploit_lv08(contract: Vault):
-    # Attack vector: Blockchain is public, no data can be hidden
-    # Training: Reading from local blockchain using the testing framework - for mainnet/testnet you can use blockchain explorer
+    # Attack vector: blockchain is public, no data can be hidden
+    # Training: reading from local blockchain using the testing framework - for mainnet/testnet you can use blockchain explorer
+
     key = read_storage_variable(Account(contract.address), "password")
     print(f"Extracted key: {key}")
 

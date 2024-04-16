@@ -12,5 +12,7 @@ def test_lv11():
 
 def exploit_lv11(contract: Elevator):
     # Attack vector: function isLastFloor is called twice instead of saving its value
+    # Training: wrongly assuming that calling method (getter) returns the same value every time
+
     building = BuildingImpl.deploy()
     building.goToWith(13, contract.address)

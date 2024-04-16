@@ -11,8 +11,8 @@ def test_lv15():
     ethernaut.check_lv15(contract)
 
 def exploit_lv15(contract: NaughtCoin, attacker: Account, other_account: Account):
-    # Attack vector:
-    # Training:
+    # Attack vector: there are multiple ways, how to transfer ERC-20 tokens
+    # Training: know methods of ERC-20 standard
     
     contract.approve(
         spender = other_account,

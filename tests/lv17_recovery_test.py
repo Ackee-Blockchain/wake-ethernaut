@@ -11,8 +11,8 @@ def test_lv17():
     ethernaut.check_lv17(contract,  foundContract)
 
 def exploit_lv17(contract: Recovery) -> Address:
-    # Attack vector:
-    # Training:
+    # Recovery vector: deployment address is calculated deterministically => can be reconstructed
+    # Training: know how to calculate deployment address
 
     helperContract = AddressGenerator.deploy()
     addressOfLostContract = helperContract.generateAddress(contract.address) 

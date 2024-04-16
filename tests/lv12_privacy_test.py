@@ -11,8 +11,8 @@ def test_lv12():
     ethernaut.check_lv12(contract)
 
 def exploit_lv12(contract: Privacy):
-    # Attack vector: Blockchain is public, no data can be hidden
-    # Training: Learn how storage layout works and how you can explore it using the testing framework
+    # Attack vector: blockchain is public, no data can be hidden
+    # Training: learn how storage layout works and how you can explore it using the testing framework
     # wake print storage-layout contracts/lv12_privacy.sol
     
     # read from storage data[2]

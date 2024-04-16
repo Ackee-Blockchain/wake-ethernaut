@@ -11,8 +11,8 @@ def test_lv16():
     ethernaut.check_lv16(contract)
 
 def exploit_lv16(contract: Preservation):
-    # Attack vector:
-    # Training:
+    # Attack vector: storage collisions => wrong usage of delegatecall
+    # Training: understanding delegatecall and storage collisions
 
     exploitContract = AttackPreservation.deploy(victimContract=contract.address)
     exploitContract.exploit()

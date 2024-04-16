@@ -12,6 +12,8 @@ def test_lv03():
 
 def exploit_lv03(contract: CoinFlip):
     # Attack vector: any calculations can be done by deployed helper contract, which than calls the original contract
+    # Training: every randomness on blockchain must be reproducible 
+
     solver = CoinFlipSolver.deploy()
 
     for i in range(11):

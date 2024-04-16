@@ -12,4 +12,5 @@ def test_lv02():
 
 def exploit_lv02(contract: Fallout):
     # Attack vector: unsecured construction method
+    
     contract.Fal1out()

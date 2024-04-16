@@ -11,8 +11,7 @@ def test_lv18():
     ethernaut.check_lv18(contract)
 
 def exploit_lv18(contract: MagicNum):
-    # Attack vector:
-    # Training:
+    # Training: deployment and simple contract implementation using assembly
     
     code_deployer = Deployer.deploy()
     
@@ -38,4 +37,3 @@ def exploit_lv18(contract: MagicNum):
     final_code = bytes.fromhex( ''.join(initialize_instructions) + ''.join(run_instructions) )
     solver_address = code_deployer.deployCode(final_code).return_value
     contract.setSolver(solver_address)
-    

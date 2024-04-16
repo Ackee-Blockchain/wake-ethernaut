@@ -12,6 +12,7 @@ def test_lv00():
 
 def exploit_lv00(contract: Tutorial):
     # Training: simple method calling
+
     print(contract.info())
     print(contract.info1())
     print(contract.info2("hello"))

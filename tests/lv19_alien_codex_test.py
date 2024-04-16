@@ -12,7 +12,7 @@ def test_lv19():
 
 def exploit_lv19(contract: AlienCodex):
     # Attack vector: underflow in array.length 
-    # Training: understanding of storage layouts of smart contracts and how memory is allocated for arrays
+    # Training: know how storage layout works for arrays
 
     exploitContract = UnderflowCalculator.deploy()
     index = exploitContract.calculateTheZeroIndex()
