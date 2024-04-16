@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "wake/console.sol";
-
 contract Deployer {
     function deployCode(bytes memory bytecode) public returns (address instance) {
       // create(v, p, n)

@@ -28,12 +28,14 @@ from pytypes.contracts.lv21_shop import Shop
 from pytypes.contracts.lv22_dex import Dex, SwappableToken
 from pytypes.contracts.lv23_dex_two import DexTwo, SwappableTokenTwo
 from pytypes.contracts.lv24_puzzle_wallet import PuzzleWallet, PuzzleProxy
+from pytypes.contracts.lv25_motorbike import Motorbike, Engine
 from pytypes.contracts.lv27_good_samaritan import GoodSamaritan
 from pytypes.contracts.lv26_double_entry_point import Forta, CryptoVault, LegacyToken, DoubleEntryPoint, DelegateERC20
 from pytypes.contracts.lv28_gatekeeper_three import GatekeeperThree
 from pytypes.contracts.lv29_switch import Switch
-from pytypes.contracts.helper.Deployer import Deployer
 from pytypes.contracts.helper.CheckSizeContract import CheckSizeContract
+from pytypes.contracts.helper.Deployer import Deployer
+from pytypes.contracts.helper.ForceTransfer import ForceTransfer
 from pathlib import Path
 
 
@@ -273,7 +275,7 @@ class EthernautDeployer:
 
     def check_lv18(self, contract: MagicNum):
         encodedCall = Abi.encode_with_signature("whatIsTheMeaningOfLife()", [], [])
-        resultEncodedCall = Account(contract.solver(), chain=default_chain).call(data=encodedCall)
+        resultEncodedCall = Account(contract.solver(), self.chain).call(data=encodedCall)
         (decodedData,) = Abi.decode(data=resultEncodedCall,types=['uint256'])
         helper = CheckSizeContract.deploy()
         sizeCheck = helper.checkSize(contract.solver())
@@ -378,12 +380,21 @@ class EthernautDeployer:
         print("Level 24 passed")
 
     #################### LEVEL 25 ####################
-    # TODO Not implemented yet
     
-    def deploy_lv25(self):
-        return
-        
-    def check_lv25(self, contract):
+    def deploy_lv25(self) -> Motorbike:
+        engine = Engine.deploy(from_=self.owner.address)
+        ForceTransfer.deploy(engine.address, value=10 * 10**18, from_=self.owner.address)
+        return Motorbike.deploy(_logic=engine.address, from_=self.owner.address)
+
+    def check_lv25(self, contract: Motorbike):
+        implementation_slot = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc
+        (logic_contract, ) = Abi.decode(['address'], self.chain.chain_interface.get_storage_at(str(contract.address), implementation_slot))
+        engine = Engine(logic_contract)
+
+        assert engine.upgrader() == self.attacker.address, "You must became the upgrader off the engine to be able to remove it."
+        assert engine.balance == 0, "You must selfdestruct the engine and drain it's ether balance."
+        assert self.attacker.balance == 20 * 10**18, "Wait with the ether spending from the engine!"
+        print("You are such a great technic! The motorbike is no longer able to drive.")
         print("Level 25 passed")
 
     #################### LEVEL 26 ####################
