@@ -11,8 +11,8 @@ def test_lv26():
     ethernaut.check_lv26(contract)
 
 def exploit_lv26(contract: DoubleEntryPoint):
-    # Attack vector: TODO
-    # Training:      TODO
+    # Attack vector: check is made, but afrer that, transfer call is delegated back to the DoubleEntryPoint token, where the spent happens
+    # Training: finding problems in a bigger codebase
 
     detection_bot = DetectionBot.deploy(contract.cryptoVault())
     contract.forta().setDetectionBot(detection_bot.address)

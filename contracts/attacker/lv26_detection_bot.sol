@@ -4,9 +4,9 @@ pragma solidity ^0.8.0;
 import "../lv26_double_entry_point.sol";
 
 contract DetectionBot is IDetectionBot {
-    address cv;
-    constructor(address cv_addr) {
-        cv = cv_addr;
+    address cryptoVault;
+    constructor(address cryptoVaultAddress) {
+        cryptoVault = cryptoVaultAddress;
     } 
 
     function handleTransaction(address user, bytes calldata) external override {
@@ -14,7 +14,7 @@ contract DetectionBot is IDetectionBot {
         assembly {
             origSender := calldataload(0xa8) 
         }
-        if(origSender == cv){
+        if (origSender == cryptoVault) {
             Forta(msg.sender).raiseAlert(user);
         }
     }

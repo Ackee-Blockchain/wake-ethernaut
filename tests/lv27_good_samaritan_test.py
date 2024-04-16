@@ -11,8 +11,8 @@ def test_lv27():
     ethernaut.check_lv27(contract)
 
 def exploit_lv27(contract: GoodSamaritan):
-    # Attack vector: TODO
-    # Training:      TODO
+    # Attack vector: reverting the token transfer with NotEnoughBalance when value of tokens send is too small
+    # Training: custom errors can be tucked in by third party
 
     attacker_contract = Attacker.deploy(contract.address)
     attacker_contract.attack()

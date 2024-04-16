@@ -171,9 +171,6 @@ class EthernautDeployer:
     
     def deploy_lv25(self):
         return
-    
-    def deploy_lv27(self):
-        return GoodSamaritan.deploy(from_=self.owner)
 
     def deploy_lv26(self):
         old_legacy_token = LegacyToken.deploy(from_=self.owner)
@@ -184,6 +181,9 @@ class EthernautDeployer:
         old_legacy_token.delegateToNewContract(DelegateERC20(new_token), from_=self.owner)
         old_legacy_token.mint(crypto_vault.address, 100 * 10**18, from_=self.owner)
         return new_token
+    
+    def deploy_lv27(self):
+        return GoodSamaritan.deploy(from_=self.owner)
     
     def deploy_lv28(self):
         return GatekeeperThree.deploy(from_=self.owner)
@@ -350,23 +350,23 @@ class EthernautDeployer:
     def check_lv25(self, contract):
         print("Level 25 passed")
 
-    def check_lv26(self, contract):
-        instance: DoubleEntryPoint = DoubleEntryPoint(contract)
-        forta: Forta = instance.forta()
-        usersDetectionBot: Address = forta.usersDetectionBots(self.attacker).address
-        assert usersDetectionBot != 0, "You must set Detection Bot."
-        vault: Address = instance.cryptoVault()
-        cryptoVault: CryptoVault = CryptoVault(vault)
+    def check_lv26(self, contract: DoubleEntryPoint):
+        forta = contract.forta()
+        vault = CryptoVault(contract.cryptoVault())
+        detection_bot = forta.usersDetectionBots(self.attacker).address
+        assert detection_bot != 0, "You must set Detection Bot."
         try:
             with must_revert():
-                cryptoVault.sweepToken(instance.delegatedFrom())
+                legacy_token = contract.delegatedFrom()
+                vault.sweepToken(legacy_token)
         except:
-            raise AssertionError("CryptoVault's underlying token can't be swept.")
-        assert instance.balanceOf(instance.cryptoVault()) > 0, "Balance of DoubleEntryPointToken should not be zero."
+            raise AssertionError("You must protect the vault - DoubleEntryPoint tokens can't be swept.")
+        assert contract.balanceOf(contract.cryptoVault()) > 0, "You must protect the vault, but it's DoubleEntryPoint token balance is 0."
         print("Level 26 passed.")
 
     def check_lv27(self, contract: GoodSamaritan):
-        assert contract.coin().balances(contract.wallet()) == 0
+        assert contract.coin().balances(contract.wallet()) == 0, "You must drain good samaritan's wallet entirely."
+        print("Wait, you only requested 10 tokens, don't ya?!!")
         print("Level 27 passed")
 
     def check_lv28(self, contract: GatekeeperThree):

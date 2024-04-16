@@ -91,7 +91,7 @@ contract DoubleEntryPoint is ERC20("DoubleEntryPointToken", "DET"), DelegateERC2
     address public delegatedFrom;
     Forta public forta;
 
-    constructor(address legacyToken, address vaultAddress, address fortaAddress, address playerAddress)Ownable() {
+    constructor(address legacyToken, address vaultAddress, address fortaAddress, address playerAddress) Ownable() {
         delegatedFrom = legacyToken;
         forta = Forta(fortaAddress);
         player = playerAddress;
