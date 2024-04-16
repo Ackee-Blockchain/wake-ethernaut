@@ -34,6 +34,8 @@ from pytypes.contracts.lv26_double_entry_point import Forta, CryptoVault, Legacy
 from pytypes.contracts.lv28_gatekeeper_three import GatekeeperThree
 from pytypes.contracts.lv29_switch import Switch
 from pytypes.contracts.lv30_higher_order import HigherOrder
+from pytypes.contracts.lv31_stake import Stake
+from pytypes.contracts.helper.DefaultERC20 import DefaultERC20
 from pytypes.contracts.helper.CheckSizeContract import CheckSizeContract
 from pytypes.contracts.helper.Deployer import Deployer
 from pytypes.contracts.helper.ForceTransfer import ForceTransfer
@@ -393,8 +395,8 @@ class EthernautDeployer:
         engine = Engine(logic_contract)
 
         assert engine.upgrader() == self.attacker.address, "You must became the upgrader off the engine to be able to remove it."
-        assert engine.balance == 0, "You must selfdestruct the engine and drain it's ether balance."
-        assert self.attacker.balance == 20 * 10**18, "Wait with the ether spending from the engine!"
+        assert engine.balance == 0, "You must selfdestruct the engine and drain all it's Ether gas."
+        assert self.attacker.balance == 20 * 10**18, "Do not spend the Ether gas yet!"
         print("You are such a great technic! The motorbike is no longer able to drive.")
         print("Level 25 passed")
 
@@ -465,12 +467,16 @@ class EthernautDeployer:
         print("Level 30 passed")
 
     #################### LEVEL 31 ####################
-    # TODO Not implemented yet
 
-    def deploy_lv31(self):
-        return
+    def deploy_lv31(self) -> Stake:
+        weth = DefaultERC20.deploy("Dummy WETH", "WETH")
+        return Stake.deploy(weth)
         
-    def check_lv31(self, contract):
+    def check_lv31(self, contract: Stake):
+        assert contract.balance != 0, "The Stake contract's ETH balance has to be greater than 0"
+        assert contract.totalStaked() > contract.balance, "totalStaked must be greater than the Stake contract's ETH balance"
+        assert contract.Stakers(self.attacker), "You must be a staker."
+        assert contract.UserStake(self.attacker) == 0, "Your staked balance must be 0."
         print("Level 31 passed")
 
     #################### LEVEL 32 ####################
