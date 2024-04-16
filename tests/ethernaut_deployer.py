@@ -33,6 +33,7 @@ from pytypes.contracts.lv27_good_samaritan import GoodSamaritan
 from pytypes.contracts.lv26_double_entry_point import Forta, CryptoVault, LegacyToken, DoubleEntryPoint, DelegateERC20
 from pytypes.contracts.lv28_gatekeeper_three import GatekeeperThree
 from pytypes.contracts.lv29_switch import Switch
+from pytypes.contracts.lv30_higher_order import HigherOrder
 from pytypes.contracts.helper.CheckSizeContract import CheckSizeContract
 from pytypes.contracts.helper.Deployer import Deployer
 from pytypes.contracts.helper.ForceTransfer import ForceTransfer
@@ -454,12 +455,13 @@ class EthernautDeployer:
         print("Level 29 passed")
 
     #################### LEVEL 30 ####################
-    # TODO Not implemented yet
 
-    def deploy_lv30(self):
-        return
+    def deploy_lv30(self) -> HigherOrder:
+        return HigherOrder.deploy(from_=self.owner)
         
-    def check_lv30(self, contract):
+    def check_lv30(self, contract: HigherOrder):
+        self.check_attacker_is(contract.commander(), "You must become the Commander of the Higher Order.", "You are now the Commander of the Higher Order.")
+        print("Extraordinary! You proved you belong to the members of the Higher Order.")
         print("Level 30 passed")
 
     #################### LEVEL 31 ####################
