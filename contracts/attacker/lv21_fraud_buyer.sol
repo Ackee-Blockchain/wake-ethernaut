@@ -1,15 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-abstract contract AShop {
-    bool public isSold;
-    function buy() external virtual;
-}
+import '../lv21_shop.sol';
 
 contract FraudBuyer {
-    AShop public shopAddress;
+    Shop public shopAddress;
     constructor(address victimAddress) {
-        shopAddress = AShop(victimAddress);
+        shopAddress = Shop(victimAddress);
     } 
     
     function exploit() public {

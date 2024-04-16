@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 interface IRecovery{
-    function destroy(address payable _to) external; 
+  function destroy(address payable _to) external; 
 }
 
 contract AddressGenerator {

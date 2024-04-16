@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-
 interface HasWithdraw {
   function donate(address _to) external payable;
   function withdraw(uint _amount) external;
