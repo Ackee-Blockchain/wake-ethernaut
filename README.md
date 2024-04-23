@@ -22,7 +22,7 @@ You can get more information about Wake on [getwake.io](https://getwake.io/) web
 
 ## 🚀 How to start?
 
-To be able to run this game commands, you need to install Wake framework and Python. You can find more instructions in [Wake docs/installation](https://ackeeblockchain.com/wake/docs/latest/installation/).
+To be able to run these game commands, you need to install the Wake framework and Python. You can find more instructions in [Wake docs/installation](https://ackeeblockchain.com/wake/docs/latest/installation/).
 
 1) Run this command, which will teach you, how to print level assignments:
     ```bash
@@ -44,7 +44,7 @@ wake compile pytypes
 **solidity smart contracts handles for Wake framework*
 
 ### 🔃 Auto compile
-To turn on auto compile in current window do:
+To turn on auto-compile in the current window do:
 ```bash
 wake compile pytypes -w
 ```

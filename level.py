@@ -37,14 +37,15 @@ def display_assignment(level_id: int):
     source: Path = Path(__file__).parent / "assignments" / "levels" / level.description
 
     level_path = \
-        ("\n\nContract's code: contracts/" + level.instance_contract + \
-        "\n- HINT: You can try (ctrl + click) on the file path. That should open the file in your editor (if your IDE supports it).") \
+        ("\n\nFiles:\n- Contract => contracts/" + level.instance_contract + \
+        "\n- Test &nbsp;  &nbsp;=> tests/" + level.instance_contract.replace(".sol", "_test.py") + \
+        "\n\nHINT: You can try (ctrl + click) on the file path. That should open the file in your editor (if your IDE supports it).") \
         if (level_id > 0) else ""
 
-    markdown_output =                                                    \
-        "# " + level.name + "\n" +                                       \
-        "Difficulty: " + render_difficulty(level.difficulty)  + "\n\n" + \
-        source.read_text() +                                             \
+    markdown_output =                                                      \
+        "# " + level.name + "\n" +                                         \
+        "- Difficulty: " + render_difficulty(level.difficulty)  + "\n\n" + \
+        source.read_text() +                                               \
         level_path
     
     console.print(Markdown(markdown_output))
