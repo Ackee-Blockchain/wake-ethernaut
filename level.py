@@ -34,14 +34,18 @@ def render_difficulty(level_difficulty: int):
 
 def display_assignment(level_id: int):
     level: Level = load_level_data(level_id)
-    source = Path(__file__).parent / "assignments" / "levels" / level.description
+    source: Path = Path(__file__).parent / "assignments" / "levels" / level.description
 
-    markdown_output = \
-        "# " + level.name + "\n" +\
-        "Difficulty: " + render_difficulty(level.difficulty)  + "\n\n" +\
-        source.read_text() +\
-        "\n\nContract's code: ./contracts/" + level.instance_contract +\
-        "\n - Hint: You can try (ctrl + click) which opens the file in editor."
+    level_path = \
+        ("\n\nContract's code: contracts/" + level.instance_contract + \
+        "\n- HINT: You can try (ctrl + click) on the file path. That should open the file in your editor (if your IDE supports it).") \
+        if (level_id > 0) else ""
+
+    markdown_output =                                                    \
+        "# " + level.name + "\n" +                                       \
+        "Difficulty: " + render_difficulty(level.difficulty)  + "\n\n" + \
+        source.read_text() +                                             \
+        level_path
     
     console.print(Markdown(markdown_output))
     sys.exit(0)
@@ -60,7 +64,7 @@ def display_finished(level_id: int):
 
 
 def display_help():
-    game_data_path = Path(__file__).parent / "assignments" / "level_help.md"
+    game_data_path = Path(__file__).parent / "assignments" / "README.md"
     console.print(Markdown(game_data_path.read_text()))
 
 

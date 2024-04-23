@@ -41,7 +41,7 @@ To compile this repository and generate pytypes* do:
 ```bash
 wake compile pytypes
 ```
-**solidity smart contracts handles for wake framework*
+**solidity smart contracts handles for Wake framework*
 
 ### 🔃 Auto compile
 To turn on auto compile in current window do:

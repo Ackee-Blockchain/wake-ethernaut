@@ -1,69 +1,93 @@
-This level walks you through the very basics of how to play the game.
+Greetings, trainee! This level is designed to walk you through the very basics of how to play this game.
 
-&nbsp;
-#### 1. Set up MetaMask
-If you don't have it already, install the [MetaMask browser extension](https://metamask.io/) (in Chrome, Firefox, Brave or Opera on your desktop machine).
-Set up the extension's wallet and use the network selector to point to the preferred network in the top left of the extension's interface. Alternatively you can use the UI button to switch between networks. If you select an unsupported network, the game will notify you and bring you to the default Sepolia testnet.
 
-#### 2. Open the browser's console
-Open your browser's console: `Tools > Developer Tools`.
+## 1. Set up the environment
 
-You should see a few messages from the game. One of them should state your player's address. This will be important during the game! You can always see your player address by entering the following command: 
+If you don't have it already - install the essential tools for this repository - Wake framework and Python. There are more possible ways how to install these, which you can find at [Wake docs/installation](https://ackeeblockchain.com/wake/docs/latest/installation/).
 
-`player`
+Not only for Ethernaut but also for Solidity development, we recommend using [VS Code](https://code.visualstudio.com/) with extension [Tools for Solidity (Wake)](https://marketplace.visualstudio.com/items?itemName=AckeeBlockchain.tools-for-solidity). This extension installs Wake automatically (most of the time). Since Wake is a testing framework based on [pytest](https://docs.pytest.org/en) this [Python extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python) will be useful as well.
 
-Keep an eye out for warnings and errors, since they could provide important information during gameplay.
 
-#### 3. Use the console helpers
+## 2. Compile the project
 
-You can also see your current ether balance by typing:
+If you successfully installed Wake and Python, you will be able to run:
+```bash
+wake compile pytypes
+```
 
-`getBalance(player)`
+This command compiles all the solidity files (= level and helper files) and generates pytypes which are solidity smart contracts handles for the Wake framework.
 
-###### NOTE: Expand the promise to see the actual value, even if it reads "pending". If you're using Chrome v62, you can use `await getBalance(player)` for a cleaner console experience.
+On some levels, you will need to write your solidity smart contract(s). Put these inside the `contracts/attacker/` directory and run the compile again. If you are forgetting about this or want to save some work, you can set up auto compile in the current console window using:
+```bash
+wake compile pytypes -w
+```
 
-Great! To see what other utility functions you have in the console type:
 
-`help()`
+## 3. Levels organization
 
-These will be super handy during gameplay.
+Each level has its test file inside the directory `tests/`. In every file, there are two functions:
 
-#### 4. The ethernaut contract
-Enter the following command in the console:
+1. `test_lvXX()`
+    - is run by wake automatically, because it starts with `test_`.
+    - does just 3 things: deploys the level contracts, calls the exploit method, and checks the solution.
 
-`ethernaut`
+2. `exploit_lvXX(...)`
+    - is your playground for your exploit or in other words, solution for a given level.
 
-This is the game's main smart contract. You don't need to interact with it directly through the console (as this app will do that for you) but you can if you want to. Playing around with this object now is a great way to learn how to interact with the other smart contracts of the game.
 
-Go ahead and expand the ethernaut object to see what's inside.
+## 4. Solving levels
 
-#### 5. Interact with the ABI
-`ethernaut` is a `TruffleContract` object that wraps the `Ethernaut.sol` contract that has been deployed to the blockchain.
+To solve levels, you need to write Python code that will interact with contracts deployed in a given level.
 
-Among other things, the contract's ABI exposes all of `Ethernaut.sol`'s public methods, such as `owner`. Type the following command for example:
+Sometimes, as mentioned in "2. Compile the project", you will need to write some solidity smart contracts too. Their pytypes handles must be imported into the test file to allow you to interact with them.
 
-`ethernaut.owner()` or `await ethernaut.owner()` if you're using Chrome v62.
+You will need this first in level 3, so feel free to return here later.
 
-You can see who the owner of the ethernaut contract is.
+For example for the mentioned level 3:
 
-#### 6. Get test ether
-To play the game, you will need test ether. The easiest way to get some testnet ether is via a valid faucet for your chosen network.
+If you write your custom `FlipOracle` smart contract in file `contracts/attacker/flip_oracle.sol` you can import it inside the `lv03_coinflip_test.py` using this code:
 
-Once you see some coins in your balance, move on to the next step.
+```python
+from pytypes.contracts.attacker.flip_oracle import FlipOracle 
+```
 
-#### 7. Getting a level instance
-When playing a level, you don't interact directly with the ethernaut contract. Instead, you ask it to generate a **level instance** for you. To do so, click the "Get New Instance" button at the bottom of the page. Go do it now and come back!
 
-You should be prompted by MetaMask to authorize the transaction. Do so, and you should see some messages in the console. Note that this is deploying a new contract in the blockchain and might take a few seconds, so please be patient when requesting new level instances!
+## 5. Rules
 
-#### 8. Inspecting the contract
-Just as you did with the ethernaut contract, you can inspect this contract's ABI through the console using the `contract` variable.
+To get the most out of this game and learn something, you should follow these rules:
 
-#### 9. Interact with the contract to complete the level
-Look into the level's info method `contract.info()` or `await contract.info()` if you're using Chrome v62.
+1. Write your Python code only inside `exploit_lvXX(...)` functions or in your own function(s) you call from here.
+2. Do not change the code inside `test_lvXX()` functions.
+3. Do not change the code inside the `contracts/` folder excluding the `contracts/attacker/` folder, but feel free to look at any code in this directory.
+4. Do not change the code inside `ethernaut_deployer.py`. If you want to make the game easier or you don't know what to do (based on the assignment), take a look in `ethernaut_deployer.py` on how is the given level deployed and checked.
+5. Do not break the deployment configuration or check the configuration in any other way.
+6. First try to exploit the level on your own, since this way, you will learn most but ...
+7. If you struggle for a long time with a particular level, you can find a solution on the branch [solution](https://github.com/Ackee-Blockchain/wake-ethernaut/tree/solution/tests). Also, you can find online a lot of recipes and hints on how to solve the Ethernaut levels.
+
+
+## 6. Run the first test
+
+After compiling the project, run the first test with:
+
+```bash
+wake test tests/lv00_hello_test.py
+```
+
+This test should fail since the file contains no solution (yet) to the first level.
+
+
+## 7. Interact with the contract to complete the level
+
+Look into the result of what `contract.info()` printed (before the test failure) and follow the instructions.
+
 You should have all you need to complete the level within the contract.
-When you know you have completed the level, submit the contract using the submit button at the bottom of the page.
-This sends your instance back to the ethernaut, which will determine if you have completed it.
 
 
-##### Tip: don't forget that you can always look in the contract's ABI!
+## 8. Verifying the solutions
+
+When you know you have completed a level, re-run the level's test. If your solution is correct, the test will end up passing, otherwise will end with a failure in the form of `AssertionError` and a short explanation of what you need to do.
+
+
+## GL and HF with hacking B^)
+
+(Scroll up, the first one is long :)
