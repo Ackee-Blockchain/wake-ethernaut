@@ -304,10 +304,12 @@ class EthernautDeployer:
     #################### LEVEL 20 ####################
     
     def deploy_lv20(self) -> Denial:
-        return Denial.deploy(from_=self.owner) 
+        contract = Denial.deploy(from_=self.owner)
+        contract.transact(value=10 * 10**18, from_=self.owner)
+        contract.setWithdrawPartner(self.owner)
+        return contract
 
     def check_lv20(self, contract: Denial):
-        contract.transact(value=100000000, from_=self.owner)
         balance_before_withdraw = self.owner.balance
         contract.withdraw()
         assert balance_before_withdraw == self.owner.balance, "You must deny the owner from withdrawing funds."
@@ -320,8 +322,8 @@ class EthernautDeployer:
         return Shop.deploy(from_=self.owner)
     
     def check_lv21(self, contract: Shop):
-        assert (contract.isSold() == False), "Product has not been bought!"
-        assert (contract.price() == 100), "The price changed during the purchase."
+        assert (contract.isSold()), "Product has not been bought!"
+        assert (contract.price() < 100), "The price changed during the purchase."
         print("Nicely Done! You have deceived the shop.")
         print("Level 21 passed")
 
