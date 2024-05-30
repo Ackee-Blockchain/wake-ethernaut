@@ -11,15 +11,7 @@ def test_lv00():
     ethernaut.check_lv00(contract)
 
 def exploit_lv00(contract: Tutorial):
-    # Training: simple method calling
-
+    # TODO Run this test to know, what to do next.
     print(contract.info())
-    print(contract.info1())
-    print(contract.info2("hello"))
-    print(contract.infoNum())
-    print(contract.info42())
-    print(contract.theMethodName())
-    print(contract.method7123949())
-    print(contract.password())
-
-    contract.authenticate(contract.password())
+    # TODO Code here ...
+    pass

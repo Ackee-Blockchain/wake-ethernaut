@@ -1,7 +1,7 @@
 from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
 from pytypes.contracts.lv16_preservation import Preservation
-from pytypes.contracts.attacker.lv16_delegate_exploit import DelegateExploit
+# TODO You can import your our own smart contract(s) here.
 
 @default_chain.connect()
 def test_lv16():
@@ -11,8 +11,7 @@ def test_lv16():
     ethernaut.check_lv16(contract)
 
 def exploit_lv16(contract: Preservation):
-    # Attack vector: storage collisions => wrong usage of delegatecall
-    # Training: understanding delegatecall and storage collisions
-
-    exploitContract = DelegateExploit.deploy(victimContract=contract.address)
-    exploitContract.exploit()
+    # TODO Claim ownership of the contract.
+    # TODO You can import your our own smart contract(s) here.
+    # TODO Code here ...
+    pass

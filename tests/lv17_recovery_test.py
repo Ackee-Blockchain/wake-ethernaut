@@ -1,7 +1,7 @@
 from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
 from pytypes.contracts.lv17_recovery import Recovery
-from pytypes.contracts.attacker.lv17_address_generator import AddressGenerator
+# TODO You can import your our own smart contract(s) here.
 
 @default_chain.connect()
 def test_lv17():
@@ -11,10 +11,7 @@ def test_lv17():
     ethernaut.check_lv17(contract,  foundContract)
 
 def exploit_lv17(contract: Recovery) -> Address:
-    # Recovery vector: deployment address is calculated deterministically => can be reconstructed
-    # Training: know how to calculate deployment address
-
-    helperContract = AddressGenerator.deploy()
-    addressOfLostContract = helperContract.generateAddress(contract.address) 
-    helperContract.destroyContract(addressOfLostContract)
-    return addressOfLostContract
+    # TODO Find the lost address of deployed contract.
+    # TODO You can import your our own smart contract(s) here.
+    # TODO Code here ...
+    pass

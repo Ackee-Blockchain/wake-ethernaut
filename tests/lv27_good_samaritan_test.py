@@ -1,7 +1,7 @@
 from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
 from pytypes.contracts.lv27_good_samaritan import GoodSamaritan
-from pytypes.contracts.attacker.lv27_evil_requester import EvilRequester
+# TODO You can import your our own smart contract(s) here.
 
 @default_chain.connect()
 def test_lv27():
@@ -11,8 +11,7 @@ def test_lv27():
     ethernaut.check_lv27(contract)
 
 def exploit_lv27(contract: GoodSamaritan):
-    # Attack vector: reverting the token transfer with NotEnoughBalance when value of tokens send is too small
-    # Training: custom errors can be tucked in by third party
-
-    attacker_contract = EvilRequester.deploy(contract.address)
-    attacker_contract.attack()
+    # TODO Drain all the funds of Good Samaritan.
+    # TODO You can import your our own smart contract(s) here.
+    # TODO Code here ...
+    pass

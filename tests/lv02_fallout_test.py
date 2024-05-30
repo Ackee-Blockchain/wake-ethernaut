@@ -11,6 +11,6 @@ def test_lv02():
     ethernaut.check_lv02(contract)
 
 def exploit_lv02(contract: Fallout):
-    # Attack vector: unsecured construction method
-    
-    contract.Fal1out()
+    # TODO Claim ownership of the contract.
+    # TODO Code here ...
+    pass

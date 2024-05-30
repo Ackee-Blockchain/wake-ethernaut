@@ -1,7 +1,7 @@
 from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
 from pytypes.contracts.lv26_double_entry_point import DoubleEntryPoint
-from pytypes.contracts.attacker.lv26_detection_bot import DetectionBot
+# TODO You can import your our own smart contract(s) here.
 
 @default_chain.connect()
 def test_lv26():
@@ -11,8 +11,7 @@ def test_lv26():
     ethernaut.check_lv26(contract)
 
 def exploit_lv26(contract: DoubleEntryPoint):
-    # Attack vector: check is made, but afrer that, transfer call is delegated back to the DoubleEntryPoint token, where the spent happens
-    # Training: finding problems in a bigger codebase
-
-    detection_bot = DetectionBot.deploy(contract.cryptoVault())
-    contract.forta().setDetectionBot(detection_bot.address)
+    # TODO Protect the CryptoVault from being drained out of tokens.
+    # TODO You can import your our own smart contract(s) here.
+    # TODO Code here ...
+    pass

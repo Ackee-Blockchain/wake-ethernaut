@@ -1,7 +1,7 @@
 from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
 from pytypes.contracts.lv21_shop import Shop
-from pytypes.contracts.attacker.lv21_fraud_buyer import FraudBuyer
+# TODO You can import your our own smart contract(s) here.
 
 @default_chain.connect()
 def test_lv21():
@@ -11,8 +11,7 @@ def test_lv21():
     ethernaut.check_lv21(contract)
 
 def exploit_lv21(contract: Shop):
-    # Attack vector: function price is called twice instead of saving its value
-    # Training: wrongly assuming that calling method (getter) returns the same value every time
-
-    exploitContract = FraudBuyer.deploy(victimAddress=contract.address)
-    exploitContract.exploit()
+    # TODO Try some shoplifting.
+    # TODO You can import your our own smart contract(s) here.
+    # TODO Code here ...
+    pass

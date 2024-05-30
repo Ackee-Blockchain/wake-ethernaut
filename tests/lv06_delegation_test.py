@@ -1,7 +1,7 @@
 from wake.testing import *
 from tests.ethernaut_deployer import EthernautDeployer
 from pytypes.contracts.lv06_delegation import Delegate, Delegation
-
+# TODO You can import your our own smart contract(s) here.
 
 @default_chain.connect()
 def test_lv06():
@@ -11,8 +11,7 @@ def test_lv06():
     ethernaut.check_lv06(contract)
 
 def exploit_lv06(contract: Delegation):
-    # Attack vector: insecure function in implementation contract
-    # Training: delegatecall, fallback(), invoking function by function selector
-    
-    function_selector = Abi.encode_with_signature("pwn()", [], [])
-    contract.transact(function_selector)
+    # TODO Claim ownership of the contract.
+    # TODO You can deploy your own smart contract(s) here.
+    # TODO Code here ...
+    pass
