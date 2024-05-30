@@ -29,7 +29,9 @@ To be able to run these game commands, you need to install the Wake framework an
     python level.py help
     ```
 
-2) Print assignment of the first level 0.
+2) Using the hint from the previous command, print the assignment of the first level 0.
+This assignment can be also found in [hello_ethernaut.md](https://github.com/Ackee-Blockchain/wake-ethernaut/blob/master/assignments/levels/hello_ethernaut.md) and it contains some general but valuable instructions.
+
 3) The instructions will guide you through the first level, but then it's up to you!
 
 ## 🤔 How to ...?
