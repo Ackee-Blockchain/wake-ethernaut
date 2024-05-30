@@ -14,7 +14,7 @@ contract FraudBuyer {
     }
 
     function price() public view returns (uint256) {
-        if ( shopAddress.isSold() == true){
+        if ( shopAddress.isSold() == false) {
             return 100;
         } else {
             return 0;

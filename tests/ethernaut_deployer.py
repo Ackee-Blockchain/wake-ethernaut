@@ -322,8 +322,8 @@ class EthernautDeployer:
         return Shop.deploy(from_=self.owner)
     
     def check_lv21(self, contract: Shop):
-        assert (contract.isSold() == False), "Product has not been bought!"
-        assert (contract.price() == 100), "The price changed during the purchase."
+        assert (contract.isSold()), "Product has not been bought!"
+        assert (contract.price() < 100), "The price changed during the purchase."
         print("Nicely Done! You have deceived the shop.")
         print("Level 21 passed")
 
