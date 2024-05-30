@@ -268,6 +268,7 @@ class EthernautDeployer:
 
     def check_lv17(self, contract: Recovery, lostAddress: Address):
         assert get_create_address(contract.address, contract.nonce-1) == lostAddress, "You must find the lost address."
+        assert Account(lostAddress).balance == 0, "You must recover the 0.001 ether from the lost address."
         print("Well done! You are a big fan of Yellow paper!")
         print("Level 17 passed") 
 
