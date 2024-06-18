@@ -6,3 +6,4 @@ __pycache__/
 *.py[cod]
 .hypothesis/
 wake-coverage.cov
+tests/test_default.py
