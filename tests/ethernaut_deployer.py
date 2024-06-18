@@ -280,7 +280,10 @@ class EthernautDeployer:
     def check_lv18(self, contract: MagicNum):
         encodedCall = Abi.encode_with_signature("whatIsTheMeaningOfLife()", [], [])
         resultEncodedCall = Account(contract.solver(), self.chain).call(data=encodedCall)
-        (decodedData,) = Abi.decode(data=resultEncodedCall,types=['uint256'])
+        try:
+            (decodedData,) = Abi.decode(data=resultEncodedCall,types=['uint256'])
+        except:
+            assert False, "Your contract must respond to whatIsTheMeaningOfLife()."
         helper = CheckSizeContract.deploy()
         sizeCheck = helper.checkSize(contract.solver())
         assert sizeCheck <= 10, "Your contract must consist of maximum 10 opcodes."
