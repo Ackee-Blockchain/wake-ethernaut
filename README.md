@@ -2,7 +2,7 @@
 
 # Ethernaut in Wake  &nbsp; |&nbsp; 🧑‍🚀 in 🌊
 
-developed by [Ackee Blockchain](https://ackeeblockchain.com)
+developed by [Ackee Blockchain](https://ackee.xyz)
 
 </div>
 
@@ -18,11 +18,11 @@ The original source of this game can be found on [ethernaut.openzeppelin.com](ht
 
 Wake is a Python-based Solidity development and testing framework with built-in vulnerability detectors, printers, solidity compiler, and much more!
 
-You can get more information about Wake on [getwake.io](https://getwake.io/) website, where you can also find a link to [Wake docs](https://ackeeblockchain.com/wake/docs/latest/testing-framework/overview/).
+You can get more information about Wake on [getwake.io](https://getwake.io/) website, where you can also find a link to [Wake docs](https://ackee.xyz/wake/docs/latest/testing-framework/overview/).
 
 ## 🚀 How to start?
 
-To be able to run these game commands, you need to install the Wake framework and Python. You can find more instructions in [Wake docs/installation](https://ackeeblockchain.com/wake/docs/latest/installation/).
+To be able to run these game commands, you need to install the Wake framework and Python. You can find more instructions in [Wake docs/installation](https://ackee.xyz/wake/docs/latest/installation/).
 
 1) Run this command, which will teach you, how to print level assignments:
     ```bash
