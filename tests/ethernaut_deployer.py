@@ -35,10 +35,12 @@ from pytypes.contracts.lv28_gatekeeper_three import GatekeeperThree
 from pytypes.contracts.lv29_switch import Switch
 from pytypes.contracts.lv30_higher_order import HigherOrder
 from pytypes.contracts.lv31_stake import Stake
+from pytypes.contracts.lv33_magic_animal_carousel import MagicAnimalCarousel
 from pytypes.contracts.helper.DefaultERC20 import DefaultERC20
 from pytypes.contracts.helper.CheckSizeContract import CheckSizeContract
 from pytypes.contracts.helper.Deployer import Deployer
 from pytypes.contracts.helper.ForceTransfer import ForceTransfer
+from pytypes.contracts.lv32_impersonator import Impersonator, ECLocker
 from pathlib import Path
 
 
@@ -486,10 +488,30 @@ class EthernautDeployer:
         print("Level 31 passed")
 
     #################### LEVEL 32 ####################
+
+    def deploy_lv32(self) -> Impersonator:
+        impersonator = Impersonator.deploy(1336,from_=self.owner)
+        return impersonator
+        
+    def check_lv32(self, contract:Impersonator):
+        locker = ECLocker(contract.lockers(0), self.chain)
+        assert locker.controller() == self.attacker.address, "You must become the controller"
+        print("Level 32 passed")
+
+    #################### LEVEL 33 ####################
+
+    def deploy_lv33(self) -> MagicAnimalCarousel:
+        return MagicAnimalCarousel.deploy(from_=self.owner)
+        
+    def check_lv33(self, contract: MagicAnimalCarousel):
+        assert contract.currentCrateId() == contract.MAX_CAPACITY(),"You must have spun all the way to the last crate slot"
+        print("Level 33 passed")
+
+    #################### LEVEL 34 ####################
     # TODO Copy this template when adding new level
 
-    def deploy_lv32(self):
+    def deploy_lv34(self):
         return
         
-    def check_lv32(self, contract):
-        print("Level 32 passed")
+    def check_lv34(self, contract):
+        print("Level 34 passed")
